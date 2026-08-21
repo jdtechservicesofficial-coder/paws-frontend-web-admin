@@ -1,0 +1,52 @@
+node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+*.cache
+.DS_Store
+
+
+# Below Comments For Design Style & Scripts
+# /public/css/*
+# !/public/css/.gitkeep
+# /public/js/core/*
+# !/public/js/core/.gitkeep
+
+# /public/js/*.js*
+# !/public/js/.gitkeep
+
+# /public/js/iqonic-script/*.min.js*
+# !/public/js/iqonic-script/.gitkeep
+# !/public/js/setting-init.js
+
+# /public/modules/**/*
+# !/public/modules/.gitkeep
+# /public/mix-manifest.json
+node_modules
+node_modules
+/storage/media-library/**/*
+
+# Ignore apps
+/aa/
+/ca/
+/em/
+/seed_brands.php
+/delete_brands.php
+
+# Ignore large log files and scratch test scripts
+tail.txt
+temp_log.txt
+tail.php
+test.php
+test_*.php
+scratch_test_*

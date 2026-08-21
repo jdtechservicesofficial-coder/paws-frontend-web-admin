@@ -1,0 +1,200 @@
+"Product ID",Category,"Product Name","Stock Quantity",Price,"Image Filename"
+170,Beds,"Chair Bed (Large)",1,0,chair-bed-large.jpg
+169,Beds,"Chair Bed (Small)",1,0,chair-bed-small.jpg
+171,Beds,"Chair Fur Bed",1,0,chair-fur-bed.jpg
+168,Beds,"Fur Bed (Medium)",1,0,fur-bed-medium.jpg
+167,Beds,"Fur Bed (Small)",1,0,fur-bed-small.jpg
+174,Beds,"Fur Bed with Hood (Large)",1,0,fur-bed-with-hood-large.jpg
+173,Beds,"Fur Bed with Hood (Medium)",1,0,fur-bed-with-hood-medium.jpg
+172,Beds,"Fur Bed with Hood (Small)",1,0,fur-bed-with-hood-small.jpg
+175,Beds,"Fur Chair",1,0,fur-chair.jpg
+163,Beds,"Hoopnet Bed",1,0,hoopnet-bed.jpg
+166,Beds,"Plain Bed (Large)",0,0,plain-bed-large.jpg
+165,Beds,"Plain Bed (Medium)",1,0,plain-bed-medium.jpg
+164,Beds,"Plain Bed (Small)",0,0,plain-bed-small.jpg
+29,"Cat Can Food","Booster Cat",54,0,booster-cat.jpg
+31,"Cat Can Food","Mousse Pate",48,0,mousse-pate.jpg
+28,"Cat Can Food",Optimax,26,0,optimax.jpg
+26,"Cat Can Food","Real Meat Brought",48,0,real-meat-brought.jpg
+30,"Cat Can Food","Sigma Cat",22,0,sigma-cat.jpg
+27,"Cat Can Food","Wimow Can Food",107,0,wimow-can-food.jpg
+32,"Cat Dry Food","Booster Cat Dry",3,0,booster-cat-dry.jpg
+34,"Cat Dry Food","Boreal Cat",8,0,boreal-cat.jpg
+38,"Cat Dry Food","Purina Go-Cat",6,0,purina-go-cat.jpg
+37,"Cat Dry Food","Royal Canin (2kg)",6,0,royal-canin-2kg.jpg
+36,"Cat Dry Food","Royal Canin (4kg)",1,0,royal-canin-4kg.jpg
+35,"Cat Dry Food","Sigma Cat",1,0,sigma-cat.jpg
+33,"Cat Dry Food",Whiskas,2,0,whiskas.jpg
+50,"Cat Litter","Chat & Chat",2,0,chat-chat.jpg
+48,"Cat Litter","Clean Paws",2,0,clean-paws.jpg
+46,"Cat Litter","Clean Step (9L)",3,0,clean-step-9l.jpg
+51,"Cat Litter","Glory Penny (10L)",1,0,glory-penny-10l.jpg
+47,"Cat Litter","Jojo Kitty Fresh (8kg)",28,0,jojo-kitty-fresh-8kg.jpg
+49,"Cat Litter",Pettex,3,0,pettex.jpg
+43,"Cat Treats",Gemon,5,0,gemon.jpg
+42,"Cat Treats",Leo,30,0,leo.jpg
+39,"Cat Treats",Mouthful,18,0,mouthful.jpg
+44,"Cat Treats",Sheba,21,0,sheba.jpg
+45,"Cat Treats",Wagon,0,0,wagon.jpg
+40,"Cat Treats","Whiskas Treat",29,0,whiskas-treat.jpg
+41,"Cat Treats","Wimow Treat",69,0,wimow-treat.jpg
+185,Clothing,"Dog Dress",39,0,dog-dress.jpg
+186,Clothing,"Dog Shoe",2,0,dog-shoe.jpg
+139,Collars,"Bell Collar (Small)",1,0,bell-collar-small.jpg
+136,Collars,"Big Collar",14,0,big-collar.jpg
+141,Collars,"Elizabethan Collar (Medium)",1,0,elizabethan-collar-medium.jpg
+140,Collars,"Elizabethan Collar (Small)",3,0,elizabethan-collar-small.jpg
+137,Collars,"Medium Collar",7,0,medium-collar.jpg
+142,Collars,"Pet Protective Collar Cone",3,0,pet-protective-collar-cone.jpg
+138,Collars,"Small Collar",8,0,small-collar.jpg
+4,"Dog Can Food",Balance,25,0,balance.jpg
+3,"Dog Can Food","Booster All Life Stage",52,0,booster-all-life-stage.jpg
+2,"Dog Can Food","Booster Puppy",58,0,booster-puppy.jpg
+10,"Dog Can Food",Dekra,88,0,dekra.jpg
+12,"Dog Can Food","First Choice Adult",32,0,first-choice-adult.jpg
+11,"Dog Can Food","First Choice Puppy",52,0,first-choice-puppy.jpg
+6,"Dog Can Food","Frances Pride",60,0,frances-pride.jpg
+7,"Dog Can Food","Gran Bonta",89,0,gran-bonta.jpg
+9,"Dog Can Food","Nitro Pro Adult",0,0,nitro-pro-adult.jpg
+8,"Dog Can Food","Nitro Pro Puppy",13,0,nitro-pro-puppy.jpg
+5,"Dog Can Food","Optimax Dog",36,0,optimax-dog.jpg
+1,"Dog Can Food",Pedigree,105,0,pedigree.jpg
+13,"Dog Can Food","Sigma Dog",1,0,sigma-dog.jpg
+14,"Dog Dry Food","Balance Dog Dry Food (5kg)",5,0,balance-dog-dry-food-5kg.jpg
+15,"Dog Dry Food","Booster Dog Dry Food (10kg)",2,0,booster-dog-dry-food-10kg.jpg
+18,"Dog Dry Food","Booster Dog Dry Food (4kg)",11,0,booster-dog-dry-food-4kg.jpg
+20,"Dog Dry Food","Boreal Dog Dry",2,0,boreal-dog-dry.jpg
+19,"Dog Dry Food","Dog Show",1,0,dog-show.jpg
+17,"Dog Dry Food","Zito Adult",4,0,zito-adult.jpg
+16,"Dog Dry Food","Zito Puppy",3,0,zito-puppy.jpg
+22,"Dog Treats","Beef Flavor",1,0,beef-flavor.jpg
+25,"Dog Treats","Booster Chew Bone",12,0,booster-chew-bone.jpg
+23,"Dog Treats","Booster Dog Treat",2,0,booster-dog-treat.jpg
+24,"Dog Treats","Chewing Bone",3,0,chewing-bone.jpg
+21,"Dog Treats",VegeBones,0,0,vegebones.jpg
+149,"Feeding Accessories","2-in-1 Plate (Large)",0,0,2-in-1-plate-large.jpg
+148,"Feeding Accessories","2-in-1 Plate (Medium)",7,0,2-in-1-plate-medium.jpg
+147,"Feeding Accessories","2-in-1 Plate (Small)",2,0,2-in-1-plate-small.jpg
+159,"Feeding Accessories","Big Bowl",9,0,big-bowl.jpg
+146,"Feeding Accessories","Cat Bottle",9,0,cat-bottle.jpg
+150,"Feeding Accessories","Design Plate",10,0,design-plate.jpg
+160,"Feeding Accessories","Extra Large Bowl",13,0,extra-large-bowl.jpg
+162,"Feeding Accessories","Food Dispenser",4,0,food-dispenser.jpg
+156,"Feeding Accessories","Jumbo Plastic Pet Bowl",6,0,jumbo-plastic-pet-bowl.jpg
+152,"Feeding Accessories","Plastic Bowl (Large)",9,0,plastic-bowl-large.jpg
+151,"Feeding Accessories","Plastic Bowl (Small)",5,0,plastic-bowl-small.jpg
+158,"Feeding Accessories","Slow Feed Bowl (Large)",5,0,slow-feed-bowl-large.jpg
+157,"Feeding Accessories","Slow Feed Bowl (Small)",4,0,slow-feed-bowl-small.jpg
+155,"Feeding Accessories","Stainless Steel Bowl (Large)",9,0,stainless-steel-bowl-large.jpg
+154,"Feeding Accessories","Stainless Steel Bowl (Medium)",5,0,stainless-steel-bowl-medium.jpg
+153,"Feeding Accessories","Stainless Steel Bowl (Small)",5,0,stainless-steel-bowl-small.jpg
+161,"Feeding Accessories","Water Dispenser",1,0,water-dispenser.jpg
+109,"Grooming Tools","3-Piece Grooming Kit",1,0,3-piece-grooming-kit.jpg
+107,"Grooming Tools","Bath Brush",3,0,bath-brush.jpg
+108,"Grooming Tools","Bath Glove",1,0,bath-glove.jpg
+106,"Grooming Tools","Double-Sided Pet Brush",6,0,double-sided-pet-brush.jpg
+111,"Grooming Tools","Grooming Bags",2,0,grooming-bags.jpg
+104,"Grooming Tools","Pet Comb",12,0,pet-comb.jpg
+105,"Grooming Tools","Pet Rake",7,0,pet-rake.jpg
+110,"Grooming Tools",Towel,11,0,towel.jpg
+124,Harnesses,"Dog Harness (Large)",6,0,dog-harness-large.jpg
+123,Harnesses,"Dog Harness (Medium)",24,0,dog-harness-medium.jpg
+122,Harnesses,"Dog Harness (Small)",9,0,dog-harness-small.jpg
+125,Harnesses,"Dog Harness (XL)",6,0,dog-harness-xl.jpg
+126,Harnesses,Harness,44,0,harness.jpg
+99,"Health & Pet Care","6-in-1 Canine Dental Solution",3,0,6-in-1-canine-dental-solution.jpg
+98,"Health & Pet Care","Cat & Kitten Deterrent Spray",2,0,cat-kitten-deterrent-spray.jpg
+67,"Health & Pet Care","Cat Flea & Tick Collar",5,0,cat-flea-tick-collar.jpg
+82,"Health & Pet Care","Cat Litter Deodorizing Beads",5,0,cat-litter-deodorizing-beads.jpg
+69,"Health & Pet Care",Catnip,3,0,catnip.jpg
+70,"Health & Pet Care","Catnip Biscuit",26,0,catnip-biscuit.jpg
+93,"Health & Pet Care","Chivic Pet Advanced Supplement",1,0,chivic-pet-advanced-supplement.jpg
+72,"Health & Pet Care","Class & Claws Pet Milk",2,0,class-claws-pet-milk.jpg
+78,"Health & Pet Care","Class & Claws Tick & Flea Spray",2,0,class-claws-tick-flea-spray.jpg
+102,"Health & Pet Care","Command Dog Wound Healing Oil",9,0,command-dog-wound-healing-oil.jpg
+68,"Health & Pet Care","Dog Flea & Tick Collar",3,0,dog-flea-tick-collar.jpg
+75,"Health & Pet Care","Dogomax Milk Replacer",7,0,dogomax-milk-replacer.jpg
+71,"Health & Pet Care","Dogs N More Cookies",0,0,dogs-n-more-cookies.jpg
+88,"Health & Pet Care","Eagle Merry Pet Dewormer",2,0,eagle-merry-pet-dewormer.jpg
+97,"Health & Pet Care","Ear Drops",7,0,ear-drops.jpg
+79,"Health & Pet Care","Eradicator Dog Spray",1,0,eradicator-dog-spray.jpg
+80,"Health & Pet Care","Eradicator Dog Spray (Small)",2,0,eradicator-dog-spray-small.jpg
+92,"Health & Pet Care",Fiproprotector,5,0,fiproprotector.jpg
+84,"Health & Pet Care","Fluravet (2.0-4.5kg)",4,0,fluravet-20-45kg.jpg
+85,"Health & Pet Care","Fluravet (20-40kg)",1,0,fluravet-20-40kg.jpg
+73,"Health & Pet Care","Goat Milk",3,0,goat-milk.jpg
+94,"Health & Pet Care","Hemp Calming Chews",3,0,hemp-calming-chews.jpg
+89,"Health & Pet Care",MangeQ,8,0,mangeq.jpg
+77,"Health & Pet Care","Pet Nail Clipper",9,0,pet-nail-clipper.jpg
+83,"Health & Pet Care","Pet Tabs Forte",1,0,pet-tabs-forte.jpg
+96,"Health & Pet Care","Pet Wipes",0,0,pet-wipes.jpg
+95,"Health & Pet Care","Pre & Probiotic",3,0,pre-probiotic.jpg
+81,"Health & Pet Care","Puppy Trainer Training Aid",11,0,puppy-trainer-training-aid.jpg
+101,"Health & Pet Care","Sheck Wound Healing Cream",5,0,sheck-wound-healing-cream.jpg
+100,"Health & Pet Care","Super Heal Wound Healing Oil",3,0,super-heal-wound-healing-oil.jpg
+76,"Health & Pet Care","Toothbrush & Paste",1,0,toothbrush-paste.jpg
+86,"Health & Pet Care","Vetzyme Moult & Coat",1,0,vetzyme-moult-coat.jpg
+87,"Health & Pet Care",Vigor-Vit,11,0,vigor-vit.jpg
+91,"Health & Pet Care","Vitalpet Puppy",0,0,vitalpet-puppy.jpg
+74,"Health & Pet Care","Wimow Kitten Milk",3,0,wimow-kitten-milk.jpg
+90,"Health & Pet Care",Zerokrim,4,0,zerokrim.jpg
+103,"Health & Pet Care","Zito Cod Oil",7,0,zito-cod-oil.jpg
+181,Housing,"Cage Size 1",1,0,cage-size-1.jpg
+182,Housing,"Cage Size 2",1,0,cage-size-2.jpg
+183,Housing,"Cage Size 3",2,0,cage-size-3.jpg
+184,Housing,"Cage Size 4",1,0,cage-size-4.jpg
+176,Housing,"Cat House",0,0,cat-house.jpg
+177,Housing,"Cat Scratcher",3,0,cat-scratcher.jpg
+178,Housing,"Duplex Cage",1,0,duplex-cage.jpg
+180,Housing,"Pet Carrier (Large)",2,0,pet-carrier-large.jpg
+179,Housing,"Pet Carrier (Small)",5,0,pet-carrier-small.jpg
+129,Leashes,"Leash & Collar (Big)",8,0,leash-collar-big.jpg
+128,Leashes,"Leash & Collar (Medium)",28,0,leash-collar-medium.jpg
+127,Leashes,"Leash & Collar (Small)",15,0,leash-collar-small.jpg
+130,Leashes,"Long Big Leash",13,0,long-big-leash.jpg
+135,Leashes,"Retractable Leash (Big)",0,0,retractable-leash-big.jpg
+134,Leashes,"Retractable Leash (Medium)",2,0,retractable-leash-medium.jpg
+133,Leashes,"Retractable Leash (Small)",1,0,retractable-leash-small.jpg
+131,Leashes,"Short Big Leash",4,0,short-big-leash.jpg
+132,Leashes,"Small Leash",2,0,small-leash.jpg
+145,"Muzzles/Mouth Guard","Large Muzzle",3,0,large-muzzle.jpg
+144,"Muzzles/Mouth Guard","Medium Muzzle",5,0,medium-muzzle.jpg
+143,"Muzzles/Mouth Guard","Small Muzzle",7,0,small-muzzle.jpg
+199,"Other Accessories","Cat Litter Box (Large)",1,0,cat-litter-box-large.jpg
+198,"Other Accessories","Cat Litter Box (Medium)",1,0,cat-litter-box-medium.jpg
+197,"Other Accessories","Cat Litter Box (Small)",1,0,cat-litter-box-small.jpg
+195,"Other Accessories","Cat Litter Packer",25,0,cat-litter-packer.jpg
+196,"Other Accessories","Pet Bag",0,0,pet-bag.jpg
+65,Shampoos,"Animology Dog Shampoo",9,0,animology-dog-shampoo.jpg
+61,Shampoos,"Cat Shampoo",4,0,cat-shampoo.jpg
+64,Shampoos,"Class & Claws Shampoo",37,0,class-claws-shampoo.jpg
+58,Shampoos,"Daisy Lilia",2,0,daisy-lilia.jpg
+59,Shampoos,"Endi Aroma Pet Shampoo (Big)",4,0,endi-aroma-pet-shampoo-big.jpg
+60,Shampoos,"Endi Aroma Pet Shampoo (Small)",2,0,endi-aroma-pet-shampoo-small.jpg
+52,Shampoos,"Endi Deodorization Spray",0,0,endi-deodorization-spray.jpg
+56,Shampoos,"Fresh N Clean",5,0,fresh-n-clean.jpg
+53,Shampoos,"Fresh Scent Shampoo",3,0,fresh-scent-shampoo.jpg
+62,Shampoos,"Gentle Pet Shampoo",3,0,gentle-pet-shampoo.jpg
+54,Shampoos,"Global Canine Dog Shampoo",5,0,global-canine-dog-shampoo.jpg
+55,Shampoos,"Tea Tree Oil Shampoo",0,0,tea-tree-oil-shampoo.jpg
+57,Shampoos,"Tearless Formula White Coat Shampoo",1,0,tearless-formula-white-coat-shampoo.jpg
+63,Shampoos,"Touchpaws Pet Shampoo",3,0,touchpaws-pet-shampoo.jpg
+66,Shampoos,"XJOPHER Dog Soap",4,0,xjopher-dog-soap.jpg
+193,"Small Pet Food","Essential Classic Rabbit Food",3,0,essential-classic-rabbit-food.jpg
+194,"Small Pet Food","Extreme Gourmet Parrot Food",0,0,extreme-gourmet-parrot-food.jpg
+114,Toys,Ball,9,0,ball.jpg
+115,Toys,"Cat Wand Toy",0,0,cat-wand-toy.jpg
+120,Toys,"Dog Brick",0,0,dog-brick.jpg
+119,Toys,"Dog Smart",0,0,dog-smart.jpg
+118,Toys,"Dog Treat Maze",0,0,dog-treat-maze.jpg
+112,Toys,"Fish Toy",5,0,fish-toy.jpg
+121,Toys,"Pet Toys",16,0,pet-toys.jpg
+117,Toys,"Shoe Toy",6,0,shoe-toy.jpg
+113,Toys,"Squeaky Ball",4,0,squeaky-ball.jpg
+116,Toys,"Squeaky Teddy Toy",24,0,squeaky-teddy-toy.jpg
+192,"Training & Hygiene","Disposable Diapers",1,0,disposable-diapers.jpg
+191,"Training & Hygiene","Female Dog Diapers",0,0,female-dog-diapers.jpg
+187,"Training & Hygiene","Jojo Fresh Pad",17,0,jojo-fresh-pad.jpg
+190,"Training & Hygiene","Training Pad (Large)",3,0,training-pad-large.jpg
+189,"Training & Hygiene","Training Pad (Medium)",2,0,training-pad-medium.jpg
+188,"Training & Hygiene","Training Pad (Small)",8,0,training-pad-small.jpg

@@ -1,0 +1,363 @@
+/* Copy Animation */
+
+  .copyInput {
+	display: inline-block;
+	line-height: 50px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 40px;
+	text-align: center;
+	font-size: 14px;
+	cursor: pointer;
+	-webkit-transition: all .3s;
+	-o-transition: all .3s;
+	transition: all .3s;
+  }
+  
+  .copied::after {
+	position: absolute;
+	top: 8px;
+	right: 12%;
+	width: 100px;
+	display: block;
+	content: "COPIED";
+	font-size: 1em;
+	padding: 5px 5px;
+	color: #fff;
+	background-color: #FF7000;
+	border-radius: 3px;
+	opacity: 0;
+	will-change: opacity, transform;
+	animation: showcopied 1.5s ease;
+  }
+  
+  @keyframes showcopied {
+	0% {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	50% {
+		opacity: 0.7;
+		transform: translateX(40%);
+	}
+	70% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	100% {
+		opacity: 0;
+	}
+  }
+
+
+
+
+  .cookies-card {
+	width: 520px;
+	padding: 30px;
+	color: #1E2337;
+	position:  fixed;
+	bottom: 15px;  
+	left: 15px;
+	z-index: 999999;
+	transition: all .5s;
+	background: #d1d1d1;
+    border-radius: 5px;
+  }
+  
+  .cookies-card.hide{
+	bottom: -500px !important;
+  }
+  .radius--10px {
+	border-radius: 10px;
+  }
+  
+  .cookies-card__icon {
+	width: 55px;
+	height: 55px;
+	border-radius: 50%;
+	background-color: #6e6f70;
+    color: #fff;
+	font-size: 32px;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .cookies-card__content {
+	margin-bottom: 0;
+  }
+  
+  .cookies-btn {
+	color: #363636;
+	text-decoration: none;
+	padding: 10px 35px;
+	margin: 3px 5px;
+	display: inline-block;
+	border-radius:  999px;
+  }
+  
+  .cookies-btn:hover {
+	color: #363636;
+  }
+
+  
+  @media (max-width: 767px) {
+	  .cookies-card {
+		  width:  100%;
+		  left: 0;
+		  bottom:  0;
+		  font-size:  14px;
+		  padding:  15px;
+	  }
+  }
+
+
+
+
+.hover-input-popup {
+        position: relative;
+    }
+    .input-popup {
+        display: none;
+    }
+    .hover-input-popup .input-popup {
+        display: block;
+        position: absolute;
+        bottom: 130%;
+        left: 50%;
+        width: 280px;
+        background-color: #1a1a1a;
+        color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+    .input-popup::after {
+        position: absolute;
+        content: '';
+        bottom: -19px;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 10px 10px 10px 10px;
+        border-style: solid;
+        border-color: transparent transparent #1a1a1a transparent;
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    .input-popup p {
+        padding-left: 20px;
+        position: relative;
+    }
+    .input-popup p::before {
+        position: absolute;
+        content: '';
+        font-family: 'Line Awesome Free';
+        font-weight: 900;
+        left: 0;
+        top: 4px;
+        line-height: 1;
+        font-size: 18px;
+    }
+    .input-popup p.error {
+        text-decoration: line-through;
+    }
+    .input-popup p.error::before {
+        content: "\f057";
+        color: #ea5455;
+    }
+    .input-popup p.success::before {
+        content: "\f058";
+        color: #28c76f;
+    }
+
+
+
+ .show-filter{
+  display: none;
+}
+@media(max-width:767px){
+  .responsive-filter-card{
+      display: none;
+      transition: none;
+  }
+  .show-filter{
+      display: block;
+  }
+}
+
+/* --- Premium Redesign Styles --- */
+
+/* Flat Cards */
+.glass-card {
+    background: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+/* Modern Inputs */
+.premium-form .form--control {
+    background-color: #f7f9fc !important;
+    border: 1px solid #eef2f6 !important;
+    border-radius: 8px !important;
+    padding: 15px 20px !important;
+    transition: all 0.3s ease !important;
+}
+.premium-form .form--control:focus {
+    background-color: #ffffff !important;
+    border-color: var(--primary) !important;
+}
+
+/* Enhanced Buttons (Flat Theme Color) */
+.btn--base.premium-btn {
+    border-radius: 8px;
+    padding: 12px 32px;
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+.btn--base.premium-btn:hover {
+    background: var(--secondary);
+    color: #ffffff;
+}
+
+/* Call To Action Overlay (Flat) */
+.cta-premium-overlay {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--primary);
+}
+.cta-premium-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1;
+}
+.cta-premium-overlay .call-to-action-wrapper {
+    position: relative;
+    z-index: 2;
+}
+.cta-premium-overlay .title {
+    color: #ffffff !important;
+}
+
+/* FAQ Modernization (Flat) */
+.faq-premium-item {
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #eef2f6;
+    transition: all 0.3s ease;
+}
+.faq-premium-item.active {
+    border-color: var(--primary);
+}
+.faq-premium-item .faq-title {
+    padding: 20px 25px;
+    font-weight: 600;
+}
+.faq-premium-item .right-icon {
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.faq-premium-item.active .right-icon {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* About Us Enhancements (Flat) */
+.about-premium-img {
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+/* -- About Us Professional Layout -- */
+.about-premium-list ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 20px;
+}
+.about-premium-list ul li {
+    background: #f7f9fc;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    border: 1px solid #eef2f6;
+}
+.about-premium-list ul li::before {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--primary);
+    margin-right: 10px;
+    font-size: 16px;
+}
+.about-premium-list p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* -- Cart Table Override -- */
+.card-area table,
+.card-area .table thead tr th,
+.card-area .table tbody tr td,
+.card-area .total-amount,
+.card-area .quantity_box input,
+.cart-total h2,
+.cart-total li,
+.cart-total .total-product-price {
+    color: #000000 !important;
+}
+
+.card-area .table thead tr th,
+.card-area .quantity_box button,
+.cart-total {
+    background-color: #f7f9fc !important;
+}
+.card-area .total-amount {
+    background-color: transparent !important;
+}
+
+.cart-details-bg {
+    display: none !important;
+}
+
+.card-area .quantity_box button {
+    border: 1px solid #ccc !important;
+}
+.card-area .quantity_box button i {
+    color: #000000 !important;
+}
+
+/* -- FAQ Enhanced -- */
+.faq-premium-item .faq-title .title,
+.faq-premium-item .faq-content p,
+.faq-premium-item .faq-content {
+    color: #000000 !important;
+}
+
+
+
