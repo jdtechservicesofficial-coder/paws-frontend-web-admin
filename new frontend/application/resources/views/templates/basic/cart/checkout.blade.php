@@ -9,10 +9,9 @@
         }
     @endphp
     <style>
-        /* Modern Checkout Redesign */
+        /* Brand Checkout Redesign */
         .checkout-page-bg {
-            background: #f8fafc;
-            min-height: 100vh;
+            /* Background handled by frontend layout (blue) */
             padding: 60px 0 100px 0;
         }
         .checkout-header {
@@ -21,30 +20,31 @@
         .checkout-header h1 {
             font-size: 36px;
             font-weight: 800;
-            color: #0f172a;
+            color: #ffffff !important;
             letter-spacing: -0.5px;
         }
+        .checkout-header p {
+            color: #e2e8f0 !important;
+        }
         .premium-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: #ffffff !important;
             border-radius: 24px;
             padding: 32px;
             margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            border: 2px solid #fdcd01 !important;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
         .card-title-modern {
             font-weight: 800;
-            color: #0f172a;
+            color: #0047b3 !important;
             margin-bottom: 24px;
             font-size: 22px;
             padding-bottom: 16px;
-            border-bottom: 2px dashed #e2e8f0;
+            border-bottom: 2px dashed #f1f5f9;
         }
         .info-accordion {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
+            background: #ffffff !important;
+            border: 2px solid #fdcd01 !important;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
@@ -52,20 +52,23 @@
             transition: all 0.3s;
         }
         .info-accordion:hover {
-            background: #dbeafe;
+            box-shadow: 0 4px 12px rgba(253, 205, 1, 0.2);
         }
         .info-accordion h4 {
             margin: 0;
             font-size: 16px;
             font-weight: 700;
-            color: #1e3a8a;
+            color: #0047b3 !important;
             display: flex;
             align-items: center;
             gap: 12px;
         }
+        .info-accordion h4 i {
+            color: #fdcd01 !important;
+        }
         .form--label {
             font-weight: 600;
-            color: #475569;
+            color: #475569 !important;
             font-size: 14px;
             margin-bottom: 8px;
         }
@@ -76,12 +79,14 @@
             font-size: 15px;
             transition: all 0.2s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.01);
-            background: #ffffff;
+            background: #f8fafc !important;
+            color: #0f172a !important;
         }
         .form--control:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+            border-color: #fdcd01;
+            box-shadow: 0 0 0 4px rgba(253, 205, 1, 0.2);
             outline: none;
+            background: #ffffff !important;
         }
         .order-summary-sticky {
             position: sticky;
@@ -99,12 +104,12 @@
         }
         .order-item-title {
             font-weight: 700;
-            color: #1e293b;
+            color: #0047b3 !important;
             font-size: 15px;
         }
         .order-item-qty {
             font-size: 13px;
-            color: #64748b;
+            color: #475569;
             background: #f1f5f9;
             padding: 2px 8px;
             border-radius: 6px;
@@ -112,7 +117,7 @@
         }
         .order-item-price {
             font-weight: 700;
-            color: #0f172a;
+            color: #0047b3 !important;
         }
         .summary-row-modern {
             display: flex;
@@ -123,11 +128,11 @@
         }
         .summary-label-modern {
             font-weight: 600;
-            color: #475569;
+            color: #475569 !important;
         }
         .summary-val-modern {
             font-weight: 700;
-            color: #0f172a;
+            color: #0047b3 !important;
         }
         .grand-total-row {
             display: flex;
@@ -135,24 +140,24 @@
             align-items: center;
             margin-top: 24px;
             padding-top: 24px;
-            border-top: 2px dashed #e2e8f0;
+            border-top: 2px dashed #f1f5f9;
         }
         .grand-total-label {
             font-size: 18px;
             font-weight: 800;
-            color: #0f172a;
+            color: #0047b3 !important;
         }
         .grand-total-val {
             font-size: 28px;
             font-weight: 900;
-            color: #2563eb;
+            color: #0047b3 !important;
         }
         .btn-modern {
-            background: #2563eb;
-            color: #ffffff;
+            background: #fdcd01 !important;
+            color: #0047b3 !important;
             padding: 16px 24px;
             border-radius: 14px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 16px;
             border: none;
             width: 100%;
@@ -161,14 +166,17 @@
             justify-content: center;
             gap: 12px;
             transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(37,99,235,0.2);
+            box-shadow: 0 10px 20px rgba(253, 205, 1, 0.3);
             cursor: pointer;
         }
         .btn-modern:hover {
-            background: #1d4ed8;
+            background: #eab308 !important;
             transform: translateY(-2px);
-            box-shadow: 0 14px 28px rgba(37,99,235,0.3);
-            color: #ffffff;
+            box-shadow: 0 14px 28px rgba(253, 205, 1, 0.4);
+            color: #0047b3 !important;
+        }
+        .btn-modern i {
+            color: #0047b3 !important;
         }
     </style>
 
