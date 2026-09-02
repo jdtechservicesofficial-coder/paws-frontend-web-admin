@@ -576,15 +576,15 @@ function getCloudinaryOrLocalUrl($media) {
         foreach ($envPaths as $envPath) {
             if (file_exists($envPath)) {
                 $envContent = file_get_contents($envPath);
-                if (preg_match('/^CLOUDINARY_URL=cloudinary:\/\/(.*?):(.*?)@(.*?)$/m', $envContent, $matches)) {
+                if (preg_match('/^CLOUDINARY_URL=["\']?cloudinary:\/\/(.*?):(.*?)@([^"\'\s]+)["\']?$/m', $envContent, $matches)) {
                     $cloudName = trim($matches[3]);
                     return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
                 }
             }
+            
+            // Fallback to the known Cloudinary cloud name for this project
+            return 'https://res.cloudinary.com/dnh2s1nmd/image/upload/' . $media->id . '/' . $media->file_name;
         }
-    }
-    
-    // Fallback to local url
     $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val') ?? '';
     return $pawllyDomain . '/storage/' . $media->id . '/' . $media->file_name;
 }
