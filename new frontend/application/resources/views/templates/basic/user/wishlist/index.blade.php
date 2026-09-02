@@ -19,7 +19,11 @@
                         <tbody>
                             @forelse($wishlists as $item)
                             <tr>
-                                <td data-label="Image"><a href="{{ route('product.details', ['slug' => slug($item->product->name), 'id' => $item->product->id])}}"><img src="{{ getImage(getFilePath('product').'/'.@$item->product->productImages[0]->image)}}" alt="product Image"></a></td>
+                                @php
+                                    $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $item->product->id)->first();
+                                    $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage('');
+                                @endphp
+                                <td data-label="Image"><a href="{{ route('product.details', ['slug' => slug($item->product->name), 'id' => $item->product->id])}}"><img src="{{ $imageUrl }}" alt="product Image"></a></td>
                                 <td data-label="Name"><a href="{{ route('product.details', ['slug' => slug($item->product->name), 'id' => $item->product->id])}}">{{ $item->product->name}}</a></td>
                                 <td data-label="Unit Price">{{__($general->cur_sym)}} {{showAmount($item->product->price)}}</td>
                                 <td data-label="Remove">

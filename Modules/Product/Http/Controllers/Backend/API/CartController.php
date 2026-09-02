@@ -32,6 +32,8 @@ class CartController extends Controller
         $sumOfPrices = $cart->sum(function ($item) {
             if($item->product_variation){
                 return optional($item->product_variation)->price * $item->qty;
+            } else {
+                return (optional($item->product)->min_price ?? 0) * $item->qty;
             }
         });
 
@@ -115,42 +117,37 @@ class CartController extends Controller
 
     }
 
-    public function  UpdateCart(CartRequest $request){
-    
-        $cart_id=$request->cart_id;
-        $product_variation_id=$request->product_variation_id;
-        $qty=$request->qty;
+    public function UpdateCart(CartRequest $request)
+    {
+        $cart_id = $request->cart_id;
+        $product_variation_id = $request->product_variation_id;
+        $qty = (int)$request->qty;
 
-        $product_variation=ProductVariation::where('id',$product_variation_id)->first();
-
-        if($product_variation){
-
-           $get_total_stock=$product_variation->product_variation_stock->stock_qty;
-
-           $cart_item = Cart::find($cart_id);
-
-           if($qty>$get_total_stock){
-
-              $message = 'Only ' . $get_total_stock . ' Quantity is available';
-
-             return response()->json(['message' => $message,'status' => true], 200);
-
-           }else if($qty<=$get_total_stock){
-
-                $difference = $qty - $cart_item->qty;
-
-                $cart_item->update(['qty' => $qty]);
-
-                if ($difference > 0) {
-                    $message = 'Quantity Added';
-                } elseif ($difference < 0) {
-                    $message = 'Quantity Removed';
-                }
-
-               return response()->json(['message' => $message,'status' => true], 200);
-           
-           }
+        $cart_item = Cart::find($cart_id);
+        if (!$cart_item) {
+            return response()->json(['message' => __('product.cart_not_found'), 'status' => false], 404);
         }
+
+        $product_variation = $product_variation_id ? ProductVariation::where('id', $product_variation_id)->first() : null;
+
+        if ($product_variation) {
+            $get_total_stock = optional($product_variation->product_variation_stock)->stock_qty ?? 0;
+        } else {
+            $product = Product::find($cart_item->product_id);
+            $get_total_stock = $product ? (int)$product->stock_qty : 999;
+        }
+
+        if ($qty > $get_total_stock) {
+            $message = 'Only ' . $get_total_stock . ' Quantity is available';
+            return response()->json(['message' => $message, 'status' => false], 200);
+        }
+
+        $difference = $qty - $cart_item->qty;
+        $cart_item->update(['qty' => $qty]);
+
+        $message = $difference >= 0 ? 'Quantity Added' : 'Quantity Removed';
+
+        return response()->json(['message' => $message, 'status' => true], 200);
     }
 
 

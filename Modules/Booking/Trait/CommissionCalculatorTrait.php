@@ -8,9 +8,9 @@ trait CommissionCalculatorTrait
 {
     public function calculateCommission($cart)
     {
-        $employee_id = $cart->product->created_by;
+        $employee_id = $cart->product->created_by ?? 1;
         $employee = User::where('id', $employee_id)->with('commissions_data')->first();
-        if($employee->hasRole('pet_store')){
+        if($employee && $employee->hasRole('pet_store')){
             $commission_amount = 0;
             $total_order_amount = 0;
 

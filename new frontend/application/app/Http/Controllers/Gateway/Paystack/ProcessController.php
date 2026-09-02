@@ -18,8 +18,11 @@ class ProcessController extends Controller
         $public_key = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'paystack_publickey')->value('val');
         $alias = $deposit->gateway->alias;
 
+        $user = auth()->user();
+        $email = $user ? $user->email : (@$deposit->detail->email ?? @$deposit->user->email ?? session('customer_email') ?? 'customer@example.com');
+
         $send['key'] = $public_key;
-        $send['email'] = auth()->user()->email;
+        $send['email'] = $email;
         $send['amount'] = $deposit->final_amo * 100;
         $send['currency'] = $deposit->method_currency;
         $send['ref'] = $deposit->trx;

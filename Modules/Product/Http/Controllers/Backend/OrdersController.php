@@ -535,7 +535,13 @@ class OrdersController extends Controller
     # download invoice
 public function downloadInvoice(Request $request, $id = null)
 {
-    $orderItem = OrderItem::with('order')->findOrFail($id ?? $request->id);
+    $requestId = $id ?? $request->id;
+    $orderItem = OrderItem::with('order')->find($requestId);
+    
+    if (!$orderItem) {
+        // Fallback: If not found, it might be an Order ID from the mobile app API request
+        $orderItem = OrderItem::with('order')->where('order_id', $requestId)->firstOrFail();
+    }
     $order_id = optional($orderItem->order)->id;
     $user_id = auth()->id();
 

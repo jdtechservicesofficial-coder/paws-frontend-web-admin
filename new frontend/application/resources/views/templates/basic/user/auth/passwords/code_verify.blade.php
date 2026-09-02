@@ -1,47 +1,56 @@
 @extends($activeTemplate.'layouts.auth')
 @section('content')
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Start Account
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<section class="account-section bg_img" data-background="{{getImage(getFilePath('shapes').'/bg.jpg')}}">
-    <div class="account-element">
-        <img src="{{getImage(getFilePath('shapes').'/inner-shape.png')}}" alt="shape">
-    </div>
-    <div class="left float-end">
-        <div class="account-header text-center">
-            <a class="site-logo" href="{{ route('home') }}"><img width="150"
-                    src="{{siteLogoDark()}}" alt="logo"></a>
-        </div>
-        <div class="account-middle">
-            <div class="account-form-area">
-                <h3 class="title">@lang('Account Verification')</h3>
-                <p>@lang('Please provide 6 digit code that was sent your email')
-                </p>
-                <form class="account-form" method="post" action="{{ route('user.password.verify.code') }}">
-                    @csrf
-                    <p class="verification-text">@lang('Please check this email for verification code')
-                        : {{ showEmailAddress($email) }}</p>
-                    <input type="hidden" name="email" value="{{ $email }}">
-
-                    @include($activeTemplate.'partials.verification_code')
-
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn--base">@lang('Verify')</button>
+<section style="background-color: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 15px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5 col-lg-6 col-md-8">
+                <div style="background: #ffffff; padding: 45px 35px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);">
+                    <div class="text-center mb-4">
+                        <a href="{{ route('home') }}">
+                            <img src="{{siteLogoDark()}}" alt="logo" style="max-width: 170px; margin-bottom: 20px;">
+                        </a>
+                        <h3 style="font-weight: 700; color: #1e293b; font-size: 26px; margin-bottom: 8px;">@lang('Account Verification')</h3>
+                        <p style="color: #64748b; font-size: 14px; margin-bottom: 4px;">@lang('Please enter the 6-digit code sent to your email')</p>
+                        <span style="display: inline-block; background-color: #eff6ff; color: #1d4ed8; font-weight: 600; font-size: 14px; padding: 4px 12px; border-radius: 6px; margin-top: 6px;">{{ showEmailAddress($email) }}</span>
                     </div>
-                </form>
+
+                    <form class="account-form submit-form" method="post" action="{{ route('user.password.verify.code') }}">
+                        @csrf
+                        <input type="hidden" name="email" value="{{ $email }}">
+
+                        <div class="form-group mb-4">
+                            <label style="font-weight: 600; color: #475569; margin-bottom: 10px; display: block; text-align: center;">@lang('Enter 6-Digit Code')</label>
+                            <input type="text" name="code" id="verification-code-input" 
+                                   maxlength="6" 
+                                   required 
+                                   autofocus 
+                                   autocomplete="one-time-code"
+                                   placeholder="------"
+                                   style="width: 100%; height: 60px; text-align: center; font-size: 30px; font-weight: 700; letter-spacing: 14px; border: 2px solid #cbd5e1; border-radius: 12px; background: #f8fafc; color: #1e293b; outline: none; transition: border-color 0.2s;"
+                                   onfocus="this.style.borderColor='#2563eb';"
+                                   onblur="this.style.borderColor='#cbd5e1';"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length === 6) { document.querySelector('.submit-form').submit(); }">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <button type="submit" class="btn btn--base w-100" style="height: 50px; font-weight: 600; font-size: 16px; border-radius: 10px; border: none; box-shadow: none; display: flex; align-items: center; justify-content: center;">
+                                @lang('Verify Code')
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p style="color: #64748b; font-size: 14px; margin-bottom: 8px;">
+                                @lang('Didn\'t receive code?') 
+                                <a href="{{ route('user.password.request') }}" style="color: #2563eb; font-weight: 600; text-decoration: none;">@lang('Try again')</a>
+                            </p>
+                            <a href="{{ route('user.login') }}" style="color: #94a3b8; font-size: 13px; text-decoration: none;">
+                                <i class="las la-arrow-left"></i> @lang('Back to Login')
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </section>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    End Account
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 @endsection
-
-@push('style')
-<style>
-    .verification-code {
-        width: 400px
-    }
-</style>
-@endpush

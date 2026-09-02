@@ -192,6 +192,12 @@ function getImage($image, $size = null)
     if (file_exists($image) && is_file($image)) {
         return asset($image) . $clean;
     }
+    
+    // Fallback: Check if the file exists relative to the parent directory (e.g., new frontend/)
+    $parentPath = base_path('../' . $image);
+    if (file_exists($parentPath) && is_file($parentPath)) {
+        return asset($image) . $clean;
+    }
     if ($size) {
         return route('placeholder.image', $size);
     }
@@ -548,3 +554,37 @@ function getProductShareLinks($productId)
 
 
 
+
+function getCloudinaryOrLocalUrl($media) {
+    if (!$media) return '';
+    
+    if (isset($media->disk) && $media->disk === 'cloudinary') {
+        // Try getting from frontend .env directly
+        $cloudinaryUrl = env('CLOUDINARY_URL');
+        if ($cloudinaryUrl && preg_match('/^cloudinary:\/\/(.*?):(.*?)@(.*?)$/', $cloudinaryUrl, $matches)) {
+            $cloudName = trim($matches[3]);
+            return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
+        }
+
+        // Fallback to checking potential backend .env locations
+        $envPaths = [
+            base_path('.env'),
+            base_path('../.env'),
+            base_path('../../.env')
+        ];
+        
+        foreach ($envPaths as $envPath) {
+            if (file_exists($envPath)) {
+                $envContent = file_get_contents($envPath);
+                if (preg_match('/^CLOUDINARY_URL=cloudinary:\/\/(.*?):(.*?)@(.*?)$/m', $envContent, $matches)) {
+                    $cloudName = trim($matches[3]);
+                    return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
+                }
+            }
+        }
+    }
+    
+    // Fallback to local url
+    $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val') ?? '';
+    return $pawllyDomain . '/storage/' . $media->id . '/' . $media->file_name;
+}

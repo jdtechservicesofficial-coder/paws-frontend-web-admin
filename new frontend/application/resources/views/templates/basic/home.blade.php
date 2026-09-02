@@ -15,8 +15,8 @@
                     <div class="row align-items-center">
                         <div class="col-xl-6 col-lg-6">
                             <div class="banner-content">
-                                <h1 class="title">{{__($banner->data_values->heading)}}</h1>
-                                <p>{{__($banner->data_values->description)}}</p>
+                                <h1 class="title" style="color: #ffffff !important; font-size: 48px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; text-shadow: 0 2px 10px rgba(0,0,0,0.15);">{{__($banner->data_values->heading)}}</h1>
+                                <p style="color: rgba(255,255,255,0.92) !important; font-size: 16px; line-height: 1.7; margin-bottom: 24px;">{{__($banner->data_values->description)}}</p>
                                 @if(!empty($banner->data_values->button_text))
                                 <div class="banner-btn">
                                     <a href="{{ url($banner->data_values->button_url) }}"

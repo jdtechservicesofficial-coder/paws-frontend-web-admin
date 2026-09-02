@@ -22,7 +22,11 @@
                                 <tr class="cart-row">
                                    <td data-label="Product Image">
                                      <a href="{{route('shop')}}">
-                                       <img src="{{ getImage(getFilePath('product').'/'.@$item->productImages[0]->image)}}" alt="Image" class="rounded" style="width:50px;">
+                                    @php
+                                        $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $item->product->id)->first();
+                                        $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage('');
+                                    @endphp
+                                       <img src="{{ $imageUrl }}" alt="Image" class="rounded" style="width:50px;">
                                    </a>
                                </td>
                                    <td data-label="Product Name">

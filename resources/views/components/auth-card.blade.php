@@ -319,7 +319,13 @@
         <!-- Left Side Feature Column -->
         <div class="col-lg-5 feature-banner">
             <div class="banner-logo">
-                <img src="{{ asset(setting('logo')) }}" alt="{{ app_name() }}">
+                @if(setting('logo'))
+                    <img src="{{ asset(setting('logo')) }}" alt="{{ app_name() }}" onerror="this.style.display='none'; document.getElementById('banner-logo-fallback').style.display='flex';" style="max-height: 44px; object-fit: contain;">
+                @endif
+                <div id="banner-logo-fallback" style="{{ setting('logo') ? 'display: none;' : 'display: flex;' }} align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #38b6ff 0%, #0052cc 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;">🐾</div>
+                    <span style="font-size: 1.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">{{ app_name() }}</span>
+                </div>
             </div>
 
             <div class="banner-content">

@@ -10,7 +10,47 @@ $policyPages = \Illuminate\Support\Facades\DB::table('pages')->whereIn('slug', [
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Footer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<footer class="footer-section pt-100 bg_img" data-background="{{asset($activeTemplateTrue.'images/footer-bg-01.png')}}">
+<style>
+    /* Brand Colors for Footer */
+    .footer-section {
+        background-color: #0052cc !important; /* Brand Blue */
+        background-image: none !important;
+    }
+    .footer-section:before,
+    .footer-section::before {
+        display: none !important; /* Remove the old secondary color overlay */
+    }
+    .footer-section .title {
+        color: #ffcc00 !important; /* Brand Yellow for headings */
+    }
+    .footer-section p,
+    .footer-section a,
+    .footer-section li,
+    .footer-section i,
+    .footer-section span {
+        color: #ffffff !important;
+    }
+    .footer-section a:hover {
+        color: #ffcc00 !important;
+    }
+    .footer-section .btn--base {
+        background-color: #ffcc00 !important;
+        color: #000000 !important;
+        border-color: #ffcc00 !important;
+        font-weight: bold;
+    }
+    .footer-section .btn--base:hover {
+        background-color: #e6b800 !important;
+    }
+    .footer-section .footer-shpae {
+        display: none !important; /* Hide the old dark shapes */
+    }
+    .footer-section .form--control {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+</style>
+<footer class="footer-section pt-100">
 
     <div class="footer-top-shape">
         <img src="{{asset($activeTemplateTrue.'images/shape.png')}}" alt="shape">

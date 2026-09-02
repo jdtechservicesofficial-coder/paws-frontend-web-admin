@@ -20,7 +20,13 @@ class UserApiController extends Controller
 
     public function store(UserRequest $request)
     {
-        $user = User::create($request->all());
+        $data_array = $request->all();
+        if (!isset($data_array['username']) || empty($data_array['username'])) {
+            $firstName = $request->first_name ?? 'user';
+            $lastName = $request->last_name ?? '';
+            $data_array['username'] = \Illuminate\Support\Str::slug($firstName . $lastName) . rand(100, 999);
+        }
+        $user = User::create($data_array);
 
         return $this->sendResponse(new UserResource($user), __('messages.user_create'));
     }

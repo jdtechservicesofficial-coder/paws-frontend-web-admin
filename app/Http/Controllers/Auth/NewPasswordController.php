@@ -23,6 +23,16 @@ class NewPasswordController extends Controller
     }
 
     /**
+     * Display the password reset success view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function success()
+    {
+        return view('auth.reset-success');
+    }
+
+    /**
      * Handle an incoming new password request.
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -53,11 +63,9 @@ class NewPasswordController extends Controller
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
+        // If the password was successfully reset, redirect to success confirmation view
         return $status == Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
+                    ? redirect()->route('password.reset.success')
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
     }

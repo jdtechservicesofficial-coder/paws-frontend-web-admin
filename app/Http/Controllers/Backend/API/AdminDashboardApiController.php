@@ -236,7 +236,7 @@ class AdminDashboardApiController extends Controller
             'order_code' => $order_code,
             'payment_status' => $orderItem->payment_status,
             'delivery_status' => $orderItem->delivery_status,
-            'total_amount' => $orderItem->total_price,
+            'total_amount' => $orderItem->total_price + $orderItem->total_tax + $orderItem->total_shipping_cost,
             'order_date' => $orderItem->created_at ? $orderItem->created_at->format('Y-m-d H:i') : '',
             'user' => [
                 'first_name' => $user ? $user->first_name : 'Unknown',

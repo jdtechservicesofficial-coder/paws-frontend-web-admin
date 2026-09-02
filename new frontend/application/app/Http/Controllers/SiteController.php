@@ -10,6 +10,7 @@ use App\Models\Frontend;
 use App\Models\Language;
 use App\Models\Shipping;
 use App\Models\Wishlist;
+use App\Models\Cart;
 use App\Models\Consultation;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
@@ -232,34 +233,53 @@ class SiteController extends Controller
         $quantity = $request->quantity;
 
         $product = Product::findOrFail($id);
-        $cart = session()->get('cart', []);
-        $discountedPrice = $product->price - ($product->price * $product->discount / 100);
 
-        $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $product->id)->first();
+        if (auth()->check()) {
+            $userId = auth()->id();
+            $dbCart = Cart::where('user_id', $userId)->where('product_id', $id)->first();
+            $productTotalQuantity = $dbCart ? ($dbCart->qty + $quantity) : $quantity;
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] += $quantity;
+            if ($productTotalQuantity > $product->quantity || $product->quantity == 0) {
+                return response()->json(['error' => 'Product out of stock'], 422);
+            }
+
+            if ($dbCart) {
+                $dbCart->qty += $quantity;
+                $dbCart->save();
+            } else {
+                $dbCart = new Cart();
+                $dbCart->user_id = $userId;
+                $dbCart->product_id = $id;
+                $dbCart->qty = $quantity;
+                $dbCart->save();
+            }
+            $cartItemCount = Cart::where('user_id', $userId)->count();
         } else {
-            $cart[$id] = [
-                "id" => $product->id,
-                "name" => $product->name,
-                "quantity" => $quantity,
-                "price" => ($product->discount != 0) ? $discountedPrice : $product->price,
-                "image_id" => $media ? $media->id : null,
-                "image_file" => $media ? $media->file_name : null,
-            ];
+            $cart = session()->get('cart', []);
+            $productTotalQuantity = isset($cart[$id]) ? ($cart[$id]['quantity'] + $quantity) : $quantity;
+
+            if ($productTotalQuantity > $product->quantity || $product->quantity == 0) {
+                return response()->json(['error' => 'Product out of stock'], 422);
+            }
+
+            $discountedPrice = $product->price - ($product->price * $product->discount / 100);
+            $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $product->id)->first();
+
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity'] += $quantity;
+            } else {
+                $cart[$id] = [
+                    "id" => $product->id,
+                    "name" => $product->name,
+                    "quantity" => $quantity,
+                    "price" => ($product->discount != 0) ? $discountedPrice : $product->price,
+                    "image_id" => $media ? $media->id : null,
+                    "image_file" => $media ? $media->file_name : null,
+                ];
+            }
+            session()->put('cart', $cart);
+            $cartItemCount = count((array) session('cart'));
         }
-
-        // Calculate total quantity
-        $totalQuantity = array_sum(array_column($cart, 'quantity'));
-
-        // Check available quantity
-        if ($totalQuantity > $product->quantity || $product->quantity == 0) {
-            return response()->json(['error' => 'Product out of stock'], 422);
-        }
-
-        session()->put('cart', $cart);
-        $cartItemCount = count((array) session('cart'));
 
         return response()->json([
             'message' => 'Product added to cart',
@@ -270,7 +290,27 @@ class SiteController extends Controller
      // getcart
      public function getCart(){
         $pageTitle = "Your Cart";
-        $cartItem = session('cart');
+        if (auth()->check()) {
+            $dbCarts = Cart::where('user_id', auth()->id())->get();
+            $cartItem = [];
+            foreach ($dbCarts as $c) {
+                $product = Product::find($c->product_id);
+                if ($product) {
+                    $discountedPrice = $product->price - ($product->price * $product->discount / 100);
+                    $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $product->id)->first();
+                    $cartItem[$product->id] = [
+                        "id" => $product->id,
+                        "name" => $product->name,
+                        "quantity" => $c->qty,
+                        "price" => ($product->discount != 0) ? $discountedPrice : $product->price,
+                        "image_id" => $media ? $media->id : null,
+                        "image_file" => $media ? $media->file_name : null,
+                    ];
+                }
+            }
+        } else {
+            $cartItem = session('cart');
+        }
         return view($this->activeTemplate.'cart.cart',compact('pageTitle','cartItem'));
     }
 
@@ -278,14 +318,18 @@ class SiteController extends Controller
     public function removeCartItem(Request $request)
     {
         $productId = $request->input('productId');
-        $cart = session()->get('cart');
 
-        if (isset($cart[$productId])) {
-            unset($cart[$productId]);
-            session()->put('cart', $cart);
+        if (auth()->check()) {
+            Cart::where('user_id', auth()->id())->where('product_id', $productId)->delete();
+            $cartItemCount = Cart::where('user_id', auth()->id())->count();
+        } else {
+            $cart = session()->get('cart');
+            if (isset($cart[$productId])) {
+                unset($cart[$productId]);
+                session()->put('cart', $cart);
+            }
+            $cartItemCount = count((array) session('cart'));
         }
-
-        $cartItemCount = count((array) session('cart'));
 
         return response()->json([
             'message' => 'Product removed from the cart',
@@ -299,13 +343,27 @@ class SiteController extends Controller
          $productId = $request->input('productId');
          $quantity = $request->input('quantity');
 
-         if($productId && $quantity){
-             $cart = session()->get('cart');
-             $cart[$productId]["quantity"] = $quantity;
-             session()->put('cart', $cart);
+         $product = Product::findOrFail($productId);
+         if ($quantity > $product->quantity || $product->quantity == 0) {
+             return response()->json(['error' => 'Product out of stock'], 422);
          }
 
-         $product = Product::findOrFail($productId);
+         if (auth()->check()) {
+             $dbCart = Cart::where('user_id', auth()->id())->where('product_id', $productId)->first();
+             if ($dbCart) {
+                 $dbCart->qty = $quantity;
+                 $dbCart->save();
+             }
+         } else {
+             if($productId && $quantity){
+                 $cart = session()->get('cart');
+                 if (isset($cart[$productId])) {
+                     $cart[$productId]["quantity"] = $quantity;
+                     session()->put('cart', $cart);
+                 }
+             }
+         }
+
          if(isset($product->discount)){
            $discount = $product->price - ($product->price * $product->discount / 100);
            $totalAmount = $quantity * $discount;
@@ -372,20 +430,26 @@ class SiteController extends Controller
 
     }
 
-      // shop
-      public function shop(){
+      public function shop(Request $request){
 
         $pageTitle = 'Shop';
         $sections = Page::where('tempname',$this->activeTemplate)->where('slug','shop')->first();
-        $products = Product::where('status', 1)
-        ->where('status', 1)
-        ->latest()
-        ->paginate(getPaginate());
+        
+        $query = Product::where('status', 1);
+        
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        
+        $products = $query->latest()->paginate(getPaginate());
 
         $shippings = Shipping::get();
-        $categories = Category::where('status',1)->latest()->paginate(getPaginate());
+        $categories = Category::where('status',1)->latest()->get();
 
-        return view($this->activeTemplate.'shop.shop',compact('sections','products','pageTitle','shippings','categories'));
+        $minPrice = Product::where('status', 1)->min('min_price') ?? 0;
+        $maxPrice = Product::where('status', 1)->max('max_price') ?? 10000;
+
+        return view($this->activeTemplate.'shop.shop',compact('sections','products','pageTitle','shippings','categories','minPrice','maxPrice'));
     }
 
     // product details
@@ -438,9 +502,13 @@ class SiteController extends Controller
         $categories = $request->input('categories', []);
         $min = $request->input('min');
         $max = $request->input('max');
-
+        $search = $request->input('search');
 
         $query = Product::with(['reviews'])->where('status', 1);
+
+        if (!empty($search)) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
 
         if (!empty($categories)) {
             $query->whereHas('categories', function ($q) use ($categories) {
@@ -459,9 +527,9 @@ class SiteController extends Controller
             $query->where('status', 1);
         })->get();
 
+        $emptyMessage = 'No products found in this category.';
 
-
-        $view = View::make($this->activeTemplate.'shop.filtered_search', compact('products', 'categories'))->render();
+        $view = View::make($this->activeTemplate.'shop.filtered_search', compact('products', 'categories', 'emptyMessage'))->render();
 
         return response()->json([
             'html' => $view

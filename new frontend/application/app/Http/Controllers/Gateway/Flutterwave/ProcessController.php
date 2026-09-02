@@ -16,11 +16,15 @@ class ProcessController extends Controller
     {
         $flutterAcc = json_decode($deposit->gatewayCurrency()->gateway_parameter);
 
-        $send['API_publicKey'] = $flutterAcc->public_key;
-        $send['encryption_key'] = $flutterAcc->encryption_key;
-        $send['customer_email'] = auth()->user()->email;
+        $user = auth()->user();
+        $email = $user ? $user->email : (@$deposit->detail->email ?? @$deposit->user->email ?? session('customer_email') ?? 'customer@example.com');
+        $mobile = $user ? $user->mobile : (@$deposit->detail->mobile ?? session('customer_mobile') ?? '');
+
+        $send['API_publicKey'] = @$flutterAcc->public_key;
+        $send['encryption_key'] = @$flutterAcc->encryption_key;
+        $send['customer_email'] = $email;
         $send['amount'] = round($deposit->final_amo,2);
-        $send['customer_phone'] = auth()->user()->mobile;
+        $send['customer_phone'] = $mobile;
         $send['currency'] = $deposit->method_currency;
         $send['txref'] = $deposit->trx;
         $send['notify_url'] = url('ipn/flutterwave');

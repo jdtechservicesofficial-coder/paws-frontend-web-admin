@@ -114,8 +114,24 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, $user)
     {
-        // Removed ViserLab specific 2FA check (ts/tv) since Pawlly doesn't use it
-        // Removed UserLogin creation because Pawlly does not have a user_logins table.
+        // Migrate session cart to database
+        if (session()->has('cart')) {
+            $sessionCart = session()->get('cart');
+            foreach ($sessionCart as $productId => $item) {
+                $dbCart = \App\Models\Cart::where('user_id', $user->id)->where('product_id', $productId)->first();
+                if ($dbCart) {
+                    $dbCart->qty += $item['quantity'];
+                    $dbCart->save();
+                } else {
+                    $dbCart = new \App\Models\Cart();
+                    $dbCart->user_id = $user->id;
+                    $dbCart->product_id = $productId;
+                    $dbCart->qty = $item['quantity'];
+                    $dbCart->save();
+                }
+            }
+            session()->forget('cart');
+        }
 
         return to_route('user.dashboard');
     }

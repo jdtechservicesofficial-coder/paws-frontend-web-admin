@@ -1,12 +1,16 @@
 <div class="row gy-4">
     @forelse ($products as $product)
-    <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6">
         <div class="ecommerce-product">
             <div class="ecommerce-product__thumb">
                 <a href="{{ route('product.details', ['slug' => slug($product->name), 'id' => $product->id])}}">
-                    <img src="{{ getImage(getFilePath('product').'/'.@$product->productImages[0]->image)}}" alt="product-image">
+                    @php
+                        $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $product->id)->first();
+                        $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage('');
+                    @endphp
+                    <img src="{{ $imageUrl }}" alt="product-image">
                 </a>
-                @if(isset($product->discount))
+                @if(!empty($product->discount) && $product->discount > 0)
                 <div class="product-badge bg--danger">
                     <p>{{$product->discount}}%</p>
                 </div>
@@ -48,7 +52,7 @@
                     </a>
                 </h3>
                 <div class="price-wrap">
-                    @if(isset($product->discount))
+                    @if(!empty($product->discount) && $product->discount > 0)
                     <span class="product-price old">{{__($general->cur_sym)}}{{showAmount($product->price)}}</span>
                     <span class="product-price new">{{ $general->cur_sym }}{{ showAmount(($product->price)- ($product->price * $product->discount/100 )) }}</span>
                     @else

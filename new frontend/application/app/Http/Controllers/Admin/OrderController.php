@@ -29,14 +29,19 @@ class OrderController extends Controller
         $order->status = $request->status;
         $order->save();
 
-        if($order->user_id != 0){
-        $userFind = User::find($order->user_id);
-        $user = $userFind;
+        $customer = $order->user_id != 0 ? User::find($order->user_id) : (object)[
+            'email' => @$order->orderGroup->email,
+            'fullname' => 'Valued Customer',
+            'username' => 'Customer',
+            'firstname' => 'Valued Customer',
+            'lastname' => '',
+        ];
 
-         notify($user, 'ORDER_ON_PROCESSING_CONFIRMATION', [
-            'order_number'=>$order->order_number,
-            'product_price' => showAmount($order->product_price)
-        ]);
+        if (!empty($customer->email)) {
+            notify($customer, 'ORDER_ON_PROCESSING_CONFIRMATION', [
+                'order_number' => $order->order_number ?? optional($order->orderGroup)->order_code ?? 'N/A',
+                'amount' => showAmount($order->total_amount ?? $order->product_price ?? 0),
+            ]);
         }
 
         if($order->status == 2){

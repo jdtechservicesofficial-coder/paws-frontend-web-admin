@@ -15,7 +15,7 @@ class CartRequest extends FormRequest
     {
         return [
             'product_id' => ['required'],
-            'product_variation_id' => ['required'],
+            'product_variation_id' => ['nullable'],
             'qty' => ['required'],
         ];
     }

@@ -233,9 +233,16 @@ class PaymentController extends Controller
          $data->trx = getTrx();
          $data->try = 0;
          $data->status = 0;
+         $data->detail = (object)[
+             'email' => $request->email,
+             'name' => $request->firstname . ' ' . $request->lastname,
+             'mobile' => $request->mobile,
+             'address' => $request->address
+         ];
          $data->save();
 
          session()->put('Track', $data->trx);
+         session()->put('customer_email', $request->email);
 
          if(auth()->user()){
              return to_route('user.deposit.confirm');
@@ -422,16 +429,24 @@ class PaymentController extends Controller
 
                 $adminNotification = new AdminNotification();
                 $adminNotification->user_id = $deposit->user_id !== 0 ? $deposit->user_id : 0;
-                $adminNotification->title = $deposit->user_id !== 0 ? 'Order place from '.$user->firstname.$user->lastname : 'Order place from guest user';
+                $adminNotification->title = $deposit->user_id !== 0 ? 'Order placed by '.($user->firstname ?? '').' '.($user->lastname ?? '') : 'Order placed by guest user';
                 $adminNotification->click_url = urlPath('admin.deposit.successful');
                 $adminNotification->save();
 
-                if($deposit->user_id !== 0 ){
-                    notify($user, 'ORDER PLACE', [
+                $customer = $deposit->user_id !== 0 ? $user : (object)[
+                    'email' => @$deposit->detail->email ?? @$order->orderGroup->email ?? session('customer_email'),
+                    'fullname' => @$deposit->detail->name ?? 'Valued Customer',
+                    'username' => @$deposit->detail->name ?? 'Customer',
+                    'firstname' => @$deposit->detail->name ?? 'Customer',
+                    'lastname' => '',
+                ];
+
+                if (!empty($customer->email)) {
+                    notify($customer, 'ORDER PLACE', [
                         'order_number' => optional($order->orderGroup)->order_code ?? 'N/A',
                         'amount' => showAmount($deposit->amount),
                         'trx' => $deposit->trx,
-                        'post_balance' => showAmount($user->balance)
+                        'post_balance' => $user ? showAmount($user->balance) : 0
                     ]);
                 }
 

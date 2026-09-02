@@ -14,7 +14,7 @@ class CategoryController extends Controller
   
     public function categoryList(Request $request)
     {
-        $perPage = $request->input('per_page', 10); // Get the number of items per page from the request (default: 10)
+        $perPage = $request->input('per_page', 100); // Default to 100 so all categories are returned
         $branchId = $request->input('branch_id');
         $employee_id = $request->input('employee_id');        
         $filter_type = $request->input('filter_type');
@@ -41,12 +41,13 @@ class CategoryController extends Controller
 
         if ($request->has('category_id') && $request->category_id != '') {
             $category = $category->where('parent_id', $request->category_id);
+        } elseif ($request->has('all') || $request->has('include_subcategories')) {
+            // return all categories
         } else {
             $category = $category->whereNull('parent_id');
         }
 
-        $category = $category->paginate($perPage);
-       // $category = $category->paginate($perPage)->appends('branch_id', $branchId);
+        $category = $category->orderBy('sorting_order_level', 'asc')->orderBy('id', 'asc')->paginate($perPage);
         $categoryCollection = ProductCategoryResource::collection($category);
 
         return response()->json([

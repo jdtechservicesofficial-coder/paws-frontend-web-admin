@@ -24,13 +24,12 @@ class ProductDetailResource extends JsonResource
         array_unshift($gallry, $this->feature_image);
 
         $today = Carbon::today();
-        $discount_value = 0;
-        if ($this->discount_start_date && $this->discount_end_date && $today->gte(Carbon::createFromTimestamp($this->discount_start_date)) &&
-                    $today->lte(Carbon::createFromTimestamp($this->discount_end_date))) {
-            $discount_value = $this->discount_value;
-        }
-        else{
-            $discount_value = 0;
+        $discount_value = $this->discount_value;
+        if ($this->discount_start_date && $this->discount_end_date) {
+            if ($today->lt(Carbon::createFromTimestamp($this->discount_start_date)) ||
+                $today->gt(Carbon::createFromTimestamp($this->discount_end_date))) {
+                $discount_value = 0;
+            }
         }
 
         $cleanedDescription = trim(strip_tags($this->description, '<p><br>')); 
@@ -63,7 +62,7 @@ class ProductDetailResource extends JsonResource
             'stock_qty' => $this->stock_qty,
             'status'=> $this->status,
             'min_purchase_qty'=>$this->min_purchase_qty,
-            'has_variation'=>$this->has_variation,
+            'has_variation'=> ($this->has_variation && $this->product_variations->isNotEmpty()) ? 1 : 0,
             'product_gallary'=>$gallry,
             'variation_data'=> ProductVariationResource::collection($this->product_variations),
             'in_wishlist' => $request->has('user_id') ? checkInWishList($this->id, $request->input('user_id')) : 0,

@@ -57,7 +57,7 @@ class EmployeeController extends Controller
 
     if (! empty($request->service_ids)) {
         $ids = ServiceEmployee::whereIn('service_id', explode(' ', $request->service_ids))->pluck('employee_id');
-        $employee = $employee->whereIn('id', $ids);
+        $employee = $employee->whereIn('users.id', $ids);
     }
     if (! empty($request->order_by) && $request->order_by == 'top') {
         $employee = $employee->withCount('services')

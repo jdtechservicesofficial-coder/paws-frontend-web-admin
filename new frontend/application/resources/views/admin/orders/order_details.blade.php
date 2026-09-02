@@ -46,8 +46,8 @@
 
                            <tr>
                               @php
-                                $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $item->id)->first();
-                                $imageUrl = $media ? asset('pawlly_storage/' . $media->id . '/' . $media->file_name) : getImage(getFilePath('product').'/');
+                                $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $item->product->id)->first();
+                                $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage(getFilePath('product').'/');
                               @endphp
                               <td><img src="{{ $imageUrl }}" alt="Image" class="rounded" style="width:50px;"></td>
 

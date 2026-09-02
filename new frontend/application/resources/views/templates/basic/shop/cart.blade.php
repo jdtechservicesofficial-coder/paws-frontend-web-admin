@@ -21,9 +21,13 @@
                         <tbody>
                             @if(isset($cartItem))
                             @forelse($cartItem as $product)
-                            @php @$total += @$product['price'] * @$product['quantity'] @endphp
+                            @php 
+                                @$total += @$product['price'] * @$product['quantity'];
+                                $mediaModel = isset($product['image_id']) ? \Illuminate\Support\Facades\DB::table('media')->where('id', $product['image_id'])->first() : null;
+                                $imageUrl = $mediaModel ? getCloudinaryOrLocalUrl($mediaModel) : getImage(getFilePath('product').'/'.@$product['image']);
+                            @endphp
                             <tr data-product-id ={{$product['id']}}>
-                                <td data-label="Image"><img src="{{ getImage(getFilePath('product').'/'.@$product['image'])}}" alt="product-image"></td>
+                                <td data-label="Image"><img src="{{ $imageUrl }}" alt="product-image"></td>
                                 <td data-label="Product">{{ @$product['name'] }}</td>
                                 <td data-label="Unit Price">{{__($general->cur_sym)}} {{showAmount(@$product['price'])}}</td>
                                 <td data-label="Quantity">

@@ -92,12 +92,28 @@ class User extends Authenticatable
 
     public function ev(): Attribute
     {
-        return new Attribute(get: fn () => 1);
+        return new Attribute(
+            get: function (mixed $value, array $attributes) {
+                $general = gs();
+                if (!$general->ev) {
+                    return 1;
+                }
+                return !empty($attributes['email_verified_at']) ? 1 : 0;
+            }
+        );
     }
 
     public function sv(): Attribute
     {
-        return new Attribute(get: fn () => 1);
+        return new Attribute(
+            get: function (mixed $value, array $attributes) {
+                $general = gs();
+                if (!$general->sv) {
+                    return 1;
+                }
+                return 1;
+            }
+        );
     }
 
     public function tv(): Attribute

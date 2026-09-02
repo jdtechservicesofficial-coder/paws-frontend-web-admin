@@ -256,6 +256,25 @@
 
                     <tbody>
                         @php
+                            $generateVariationOptions = function($options) {
+                                $result = [];
+                                if (is_string($options)) {
+                                    $options = json_decode($options, true);
+                                }
+                                if (is_array($options)) {
+                                    foreach ($options as $option) {
+                                        if (isset($option['variation']['name']) && isset($option['variation_value'])) {
+                                            $result[] = [
+                                                'name' => $option['variation']['name'],
+                                                'values' => array_map(function($val) {
+                                                    return ['name' => $val['name']];
+                                                }, (array)$option['variation_value'])
+                                            ];
+                                        }
+                                    }
+                                }
+                                return $result;
+                            };
                             $user = auth()->user();
                             $product = optional($orderItem->product_variation)->product;
                             $totalprice = $orderItem->total_price;
@@ -278,7 +297,7 @@
                                         </h6>
                                         @if (!empty($orderItem->product_variation))
                                             <div class="text-muted">
-                                                @foreach (generateVariationOptions($orderItem->product_variation->combinations) as $variation)
+                                                @foreach ($generateVariationOptions($orderItem->product_variation->combinations) as $variation)
                                                     <span class="fs-xs">
                                                         {{ $variation['name'] }}:
                                                         @foreach ($variation['values'] as $value)
@@ -396,7 +415,7 @@
                                                 </h6>
                                                 @if (!empty($orderItem->product_variation))
                                                     <div class="text-muted">
-                                                        @foreach (generateVariationOptions($item->product_variation->combinations) as $variation)
+                                                        @foreach ($generateVariationOptions($item->product_variation->combinations) as $variation)
                                                             <span class="fs-xs">
                                                                 {{ $variation['name'] }}:
                                                                 @foreach ($variation['values'] as $value)

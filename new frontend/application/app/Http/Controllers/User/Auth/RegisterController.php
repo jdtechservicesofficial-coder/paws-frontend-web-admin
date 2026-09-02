@@ -131,13 +131,21 @@ class RegisterController extends Controller
         $user->login_type = 'email';
         $user->status = 1;
         $user->is_banned = 0;
-        $user->email_verified_at = now(); // Automatically verify email for seamless Pawlly experience
+
+        if ($general->ev) {
+            $user->email_verified_at = null;
+            $user->ver_code = verificationCode(6);
+            $user->ver_code_send_at = \Carbon\Carbon::now();
+        } else {
+            $user->email_verified_at = now();
+        }
         $user->save();
 
-        // Removed AdminNotification creation because Pawlly's schema does not include an admin_notifications table.
-
-        // Removed UserLogin creation because Pawlly does not have a user_logins table.
-
+        if ($general->ev) {
+            notify($user, 'EVER_CODE', [
+                'code' => $user->ver_code
+            ], ['email']);
+        }
 
         return $user;
     }

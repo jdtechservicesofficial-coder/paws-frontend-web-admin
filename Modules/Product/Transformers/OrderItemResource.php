@@ -43,7 +43,7 @@ class OrderItemResource extends JsonResource
             'discount_value' => $this->discount_value,
             'discount_type'=> $this->discount_type,
             'product_review' =>$this->review,
-            'employee_id' => $user->id,
+            'employee_id' => optional($user)->id,
             'sold_by'=>$user ? $user->first_name . ' ' . $user->last_name : 'Unknown',
             'customer_name' => optional(optional($this->order)->user)->first_name ? optional(optional($this->order)->user)->first_name . ' ' . optional(optional($this->order)->user)->last_name : 'Customer',
             'customer_email' => optional(optional($this->order)->user)->email,

@@ -4,57 +4,86 @@
     <!-- ==================== Our Products Start Here ==================== -->
     <section class="ecommerce-products single-shop ptb-120 mb-3">
         <img src="{{asset($activeTemplateTrue.'images/service-bg.png')}}" alt="shape" class="single-shop-bg">
-        <div class="container">
-            <div class="row gy-4 justify-content-center">
-                <div class="col-xl-3 col-lg-4">
-                    <div class="sidebar">
-                        <div class="widget-box mb-30">
-                            <h4 class="widget-title">@lang('Categories')</h4>
-                            <div class="category-widget-box">
-                                <ul class="category-list">
-                                    @foreach($categories as $item)
-                                        <li class="categories-search">
-                                            <input class="form-check-input filter-by-category" name="categories" type="checkbox" value="{{$item->id}}" id="chekbox-{{$loop->index}}">
-                                            <a href="javascript:void(0)">{{$item->name}}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+        <div class="container-fluid px-sm-5">
+            
+            <!-- Horizontal Filters Section -->
+            <div class="shop-top-filters-area mb-5">
+                
+                <!-- Categories Horizontal Slider -->
+                <div class="categories-horizontal-slider mb-4" style="min-width: 0;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="m-0" style="font-size: 18px; font-weight: 700; color: #0052cc;">@lang('Categories')</h4>
+                    </div>
+                    <div class="native-category-scroll">
+                        <div class="d-flex" style="gap: 15px; overflow-x: auto; padding-bottom: 15px; -webkit-overflow-scrolling: touch;">
+                            <style>
+                                .category-pill-span {
+                                    display: inline-block;
+                                    padding: 8px 16px;
+                                    background-color: #f1f5f9;
+                                    color: #475569;
+                                    border-radius: 20px;
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                    transition: all 0.2s;
+                                }
+                                .filter-by-category:checked + .category-pill-span {
+                                    background-color: #0052cc !important;
+                                    color: #ffffff !important;
+                                    box-shadow: 0 4px 10px rgba(0, 82, 204, 0.3);
+                                }
+                            </style>
+                            @foreach($categories as $item)
+                                <div style="flex-shrink: 0;">
+                                    <label class="category-pill-label m-0" style="cursor: pointer;">
+                                        <input class="form-check-input filter-by-category d-none" name="categories" type="checkbox" value="{{$item->id}}" id="chekbox-{{$loop->index}}">
+                                        <span class="category-pill-span">{{$item->name}}</span>
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
+                    </div>
+                </div>
 
-                        <div class="widget-box mb-30">
-                            <h4 class="widget-title">@lang('Price Range')</h4>
-                            <p class="pb-2 pt-1">@lang('Price Range')-({{$general->cur_sym}}<span
-                                id="minTxt">@lang('5')</span>-{{$general->cur_sym}}<span
-                                id="maxTxt">@lang('10000')</span>)
-                            </p>
-                            <div class="category-widget-box">
-                                <div class="advance_search_input mb-20">
-                                    <div class="range-slider">
-                                        <div id="p-range"></div>
-                                        <input type="hidden" name="min" id="min">
-                                        <input type="hidden" name="max" id="max">
-                                        <div class="clearfix"></div>
-                                    </div>
+                <!-- Search and Price Filter -->
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="search-box">
+                            <input type="text" id="searchValue" class="form-control form--control" placeholder="@lang('Search for a product...')" value="{{ request('search') }}" style="border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px 15px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="price-filter-box">
+                            <h5 class="mb-3" style="font-size: 15px; font-weight: 600;">@lang('Price Range'): {{$general->cur_sym}}<span id="minTxt">{{ $minPrice }}</span> - {{$general->cur_sym}}<span id="maxTxt">{{ $maxPrice }}</span></h5>
+                            <div class="advance_search_input" style="max-width: 100%;">
+                                <div class="range-slider">
+                                    <div id="p-range"></div>
+                                    <input type="hidden" name="min" id="min" value="{{ $minPrice }}">
+                                    <input type="hidden" name="max" id="max" value="{{ $maxPrice }}">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-9 col-lg-8 main-content">
+
+            </div>
+
+            <!-- Products Grid -->
+            <div class="row gy-4 justify-content-center">
+                <div class="col-xl-12 col-lg-12 main-content">
                     <div class="row gy-4">
                         @forelse($products as $product)
-                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                             <div class="ecommerce-product">
                                 <div class="ecommerce-product__thumb">
                                     @php
                                         $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $product->id)->first();
-                                        $imageUrl = $media ? asset('pawlly_storage/' . $media->id . '/' . $media->file_name) : getImage('');
+                                        $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage('');
                                     @endphp
                                     <a href="{{ route('product.details', ['slug' => slug($product->name), 'id' => $product->id])}}">
                                         <img src="{{ $imageUrl }}" alt="product-image">
                                     </a>
-                                    @if(isset($product->discount))
+                                    @if(!empty($product->discount) && $product->discount > 0)
                                     <div class="product-badge bg--danger">
                                         <p>{{$product->discount}}%</p>
                                     </div>
@@ -96,7 +125,7 @@
                                         </a>
                                     </h3>
                                     <div class="price-wrap">
-                                        @if(isset($product->discount))
+                                        @if(!empty($product->discount) && $product->discount > 0)
                                         <span class="product-price old">{{__($general->cur_sym)}}{{showAmount($product->price)}}</span>
                                         <span class="product-price new">{{ $general->cur_sym }}{{ showAmount(($product->price)- ($product->price * $product->discount/100 )) }}</span>
                                         @else
@@ -113,9 +142,9 @@
                     </div>
 
                     <div class="row mt-4">
-                        @if ($categories->hasPages())
+                        @if ($products->hasPages())
                         <div class="col-md-12 d-flex justify-content-center">
-                            {{ paginateLinks($categories) }}
+                            {{ paginateLinks($products) }}
                         </div>
                         @endif
                     </div>
@@ -259,9 +288,9 @@
 
         $("#p-range").slider({
             range: true,
-            min: 0,
-            max: 1000,
-            values: [5, 1000],
+            min: {{ $minPrice }},
+            max: {{ $maxPrice }},
+            values: [{{ $minPrice }}, {{ $maxPrice }}],
             step: 1,
             slide: function (event, ui) {
                 $("#min").val(ui.values[0]),
@@ -270,41 +299,34 @@
                 $("#maxTxt").html(ui.values[1]);
             },
             change:function(){
-                    var min = $('input[name="min"]').val();
-                    var max = $('input[name="max"]').val();
-
-                    var categories   = [];
-
-                     getFilteredData(min,max,categories)
-                }
+                triggerFilter();
+            }
         });
 
-
-        $("input[type='checkbox'][name='categories']").on('click', function(){
-            var categories   = [];
-            var min = [];
-            var max = [];
-
-                $('.filter-by-category:checked').each(function() {
-                    if(!categories.includes(parseInt($(this).val()))){
-                        categories.push(parseInt($(this).val()));
-                    }
-                });
-                getFilteredData(min,max,categories)
+        $("input[name='categories']").on('change', function(){
+            triggerFilter();
         });
-
-
 
         $("#searchValue").on('keyup', function () {
-            var categories   = [];
-            var min = [];
-            var max = [];
-
-            var searchValue = $(this).val();
-            getFilteredData(min,max,categories)
+            triggerFilter();
         });
 
-        function getFilteredData(min,max,categories){
+        function triggerFilter() {
+            var min = $('input[name="min"]').val();
+            var max = $('input[name="max"]').val();
+            var search = $('#searchValue').val();
+            var categories = [];
+            
+            $('.filter-by-category:checked').each(function() {
+                if(!categories.includes(parseInt($(this).val()))){
+                    categories.push(parseInt($(this).val()));
+                }
+            });
+            
+            getFilteredData(min, max, categories, search);
+        }
+
+        function getFilteredData(min, max, categories, search){
 
             $.ajax({
                 type: "get",
@@ -313,11 +335,12 @@
                     "min":min,
                     "max":max,
                     "categories": categories,
+                    "search": search
                 },
                 dataType: "json",
                 success: function (response) {
                     if(response.html){
-                        $('.main-content').html(response.html);
+                        $('.main-content .row.gy-4').html(response.html);
                     }
 
                     if(response.error){

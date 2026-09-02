@@ -68,6 +68,9 @@ class OrdersController extends Controller
         if (count($carts) > 0) {
             # check carts available stock -- todo::[update version] -> run this check while storing OrderItems
             foreach ($carts as $cart) {
+                if (!$cart->product_variation || !$cart->product_variation->product) {
+                    return response()->json(['message' => 'One or more items in your cart are no longer available.', 'status' => false]);
+                }
                 $productVariationStock = $cart->product_variation->product_variation_stock ? $cart->product_variation->product_variation_stock->stock_qty : 0;
                 if ($cart->qty > $productVariationStock) {
                     $message = $cart->product_variation->product->name. ' is out of stock';
@@ -132,11 +135,11 @@ class OrdersController extends Controller
                 $orderItem->unit_price           = $discounted_price;
                 $orderItem->total_tax            = $tax_data['total_tax_amount'];
                 $orderItem->total_price          = $orderItem->unit_price * $orderItem->qty;
-                $orderItem->vendor_id            = $cart->product_variation->product->created_by;
+                $orderItem->vendor_id            = $cart->product_variation->product->created_by ?? 1;
                 $orderItem->total_shipping_cost  = $logisticZone ? $logisticZone->standard_delivery_charge : 0;
                 $orderItem->payment_status       = $request['payment_status'];
-                $orderItem->discount_value       = $cart->product_variation->product->discount_value;
-                $orderItem->discount_type        = $cart->product_variation->product->discount_type;
+                $orderItem->discount_value       = $cart->product_variation->product->discount_value ?? 0;
+                $orderItem->discount_type        = $cart->product_variation->product->discount_type ?? 'flat';
                 $orderItem->expected_delivery_date  =  $expected_delivery_date->format('Y-m-d');
 
                 $orderItem->save();
@@ -206,7 +209,7 @@ class OrdersController extends Controller
                 $product_price = $cart->qty * variationDiscountedPrice($cart->product_variation->product, $cart->product_variation);
                 $ordervendor = new OrderVendorMapping();
                 $ordervendor->product_id = $cart->product_id;
-                $ordervendor->vendor_id = $cart->product->created_by;
+                $ordervendor->vendor_id = $cart->product->created_by ?? 1;
                 $ordervendor->order_id = $order->id;
                 $ordervendor->product_total_amount = $product_price;
                 $ordervendor->save();
@@ -241,6 +244,11 @@ class OrdersController extends Controller
 
             return response()->json(['message' => $message,'product'=>$order,'status' => true], 200);
         }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Cart is empty. Order could not be placed.'
+        ], 400);
     }
 
     public function  statusList(){

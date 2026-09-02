@@ -169,15 +169,28 @@ class NotifyProcess{
         //Getting the notification message from database if use and template exist
         //If not exist, get the message which have sent via method
 		if ($user && $template) {
-		    $message = $this->replaceShortCode($user->fullname,$user->username,$this->setting->$globalTemplate,$template->$body);
+		    $fullname = $user->fullname ?? (($user->firstname ?? '') . ' ' . ($user->lastname ?? ''));
+		    if (empty(trim($fullname))) $fullname = 'Valued Customer';
+		    $username = $user->username ?? $fullname;
+		    $message = $this->replaceShortCode($fullname, $username, $this->setting->$globalTemplate ?? '', $template->$body);
 		    if (empty($message)) {
 		        $message = $template->$body;
 		    }
 		}else{
-			$message = $this->replaceShortCode($this->receiverName,$this->toAddress,$this->setting->$globalTemplate,$this->message);
+			$fullname = $this->receiverName ?? 'Valued Customer';
+			$username = $this->toAddress ?? 'Customer';
+			$message = $this->replaceShortCode($fullname, $username, $this->setting->$globalTemplate ?? '', $this->message);
 		}
 
-        //replace the all short cod of template
+		// Replace global shortcodes in final message
+		$message = str_replace('{{fullname}}', $fullname, $message);
+		$message = str_replace('{{username}}', $username, $message);
+		$message = str_replace('{{name}}', $fullname, $message);
+		$message = str_replace('{{site_name}}', $this->setting->site_name ?? 'PAW&Paws', $message);
+		$message = str_replace('{{currency_symbol}}', $this->setting->cur_sym ?? '₦', $message);
+		$message = str_replace('{{site_currency}}', $this->setting->cur_text ?? 'NGN', $message);
+
+        //replace the all short codes of template
 	    if ($this->shortCodes) {
 		    foreach ($this->shortCodes as $code => $value) {
 		        $message = str_replace('{{' . $code . '}}', $value, $message);

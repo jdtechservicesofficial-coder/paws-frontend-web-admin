@@ -20,15 +20,19 @@ class DashboardController extends Controller
         $category = ProductCategory::with('media')
             ->where('status', 1)
             ->whereNull('parent_id')
-            ->paginate($perPage)
-            ->forPage(1, 6);
+            ->orderBy('sorting_order_level', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
 
-        $productQuery=Product::where('status',1)->with('media','categories','brand','unit','product_variations');
+        $productQuery = Product::where('status', 1)->with('media', 'categories', 'brand', 'unit', 'product_variations');
 
-        $productQuery->whereHas('user', function ($query) {
-            $query->whereHas('roles', function ($query) {
-                $query->whereIn('name', ['pet_store', 'admin', 'demo_admin']);
-            });
+        $productQuery->where(function ($query) {
+            $query->whereNull('created_by')
+                ->orWhereHas('user', function ($q) {
+                    $q->whereHas('roles', function ($r) {
+                        $r->whereIn('name', ['pet_store', 'admin', 'demo_admin']);
+                    });
+                });
         });
 
         $featuredProduct=$productQuery->where('is_featured',1)->inRandomOrder()->paginate($perPage)->forPage(1, 6);

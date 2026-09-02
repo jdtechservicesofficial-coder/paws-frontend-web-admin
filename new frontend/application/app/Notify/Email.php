@@ -59,8 +59,11 @@ class Email extends NotifyProcess{
     */
 	protected function prevConfiguration(){
 		if ($this->user) {
-			$this->email = $this->user->email;
-			$this->receiverName = $this->user->first_name . ' ' . $this->user->last_name;
+			$this->email = $this->user->email ?? '';
+			$this->receiverName = $this->user->fullname ?? (($this->user->firstname ?? $this->user->first_name ?? '') . ' ' . ($this->user->lastname ?? $this->user->last_name ?? ''));
+			if (empty(trim($this->receiverName))) {
+				$this->receiverName = 'Valued Customer';
+			}
 		}
 		$this->toAddress = $this->email;
 	}

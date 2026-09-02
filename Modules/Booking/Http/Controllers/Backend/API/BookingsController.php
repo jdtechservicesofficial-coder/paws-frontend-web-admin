@@ -137,6 +137,27 @@ class BookingsController extends Controller
             case 'veterinary':
                 storeMediaFile($booking, $request->file('medical_report'), 'medical_report');
 
+                $start_video_link = $request->start_video_link;
+                $join_video_link = $request->join_video_link;
+                
+                $service_data = \Modules\Service\Models\Service::where('id', $request->service_id)->first();
+                if ($service_data && ($service_data->type == 'video-consultancy' || str_contains(strtolower($service_data->name), 'video') || $service_data->slug == 'video-consultation')) {
+                    $zoom_data = $request->all();
+                    if(isset($request->date_time)) {
+                        $dt = new DateTime($request->date_time);
+                        $zoom_data['date'] = $dt->format('Y-m-d');
+                        $zoom_data['time'] = $dt->format('H:i:s');
+                    }
+                    $zoom_data['service_name'] = $request->service_name;
+                    $zoom_data['service_duration'] = $request->duration;
+                    
+                    $zoom_url = getzoomVideoUrl($zoom_data);
+                    if (is_array($zoom_url) && !empty($zoom_url)) {
+                        $start_video_link = $zoom_url['start_url'];
+                        $join_video_link = $zoom_url['join_url'];
+                    }
+                }
+
                 $veterinary = [
                     'booking_id' => $booking->id,
                     'date_time' => $request->date_time,
@@ -145,8 +166,8 @@ class BookingsController extends Controller
                     'price' =>$request->price,
                     'reason' =>$request->reason,
                     'service_name' =>$request->service_name,
-                    'start_video_link' =>$request->start_video_link,
-                    'join_video_link' =>$request->join_video_link,
+                    'start_video_link' => $start_video_link,
+                    'join_video_link' => $join_video_link,
                     'address' => $request->address,
 
                 ];

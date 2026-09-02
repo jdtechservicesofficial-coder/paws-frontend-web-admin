@@ -518,6 +518,8 @@ class EmployeesController extends Controller
             $data = \Arr::add($data, 'email_verified_at', null);
         }
 
+        $data['username'] = \Illuminate\Support\Str::slug($request->first_name . $request->last_name) . rand(100, 999);
+
         $data = User::create($data);
 
         $current_time = Carbon::now();

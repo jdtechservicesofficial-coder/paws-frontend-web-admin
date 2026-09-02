@@ -293,6 +293,8 @@ class UserController extends Controller
             $data_array = Arr::add($data_array, 'email_verified_at', null);
         }
 
+        $data_array['username'] = Str::slug($request->first_name . $request->last_name) . rand(100, 999);
+
         $$module_name_singular = User::create($data_array);
 
         $roles = $request['roles'];
@@ -314,10 +316,8 @@ class UserController extends Controller
             $$module_name_singular->syncPermissions($permissions);
         }
 
-        // Username
+        // ID
         $id = $$module_name_singular->id;
-        $$module_name_singular->username = $username;
-        $$module_name_singular->save();
 
         event(new UserCreated($$module_name_singular));
 
@@ -1082,6 +1082,8 @@ class UserController extends Controller
         } else {
             $data_array = Arr::add($data_array, 'email_verified_at', null);
         }
+
+        $data_array['username'] = \Illuminate\Support\Str::slug($request->first_name . $request->last_name) . rand(100, 999);
 
         $user = User::create($data_array);
 

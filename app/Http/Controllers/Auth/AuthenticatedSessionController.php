@@ -33,14 +33,20 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $user = User::where('email', request('email'))->first();
-        if($user){
-            $isActive=$this->checkService($request);
-        }
-        else{
+        if(!$user){
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
+
+        // Restrict customer accounts from logging into the Admin Portal
+        if ($user->user_type === 'user' || $user->hasRole('user')) {
+            return back()->withErrors([
+                'email' => 'Access denied. This portal is for administrative and staff accounts only. Please use the mobile application to access your customer account.',
+            ])->onlyInput('email');
+        }
+
+        $isActive = $this->checkService($request);
         $usertype = $user->user_type;
 
         if($usertype == "vet" || $usertype == "groomer" || $usertype == "walker" || $usertype == "boarder" || $usertype == "trainer" || $usertype == "day_taker" || $usertype == "pet_store"){
@@ -50,7 +56,7 @@ class AuthenticatedSessionController extends Controller
                     'custom_message' =>  __('messages.account_not_verify'),
                 ]);
             }
-         }
+        }
 
         if($isActive==1){
 

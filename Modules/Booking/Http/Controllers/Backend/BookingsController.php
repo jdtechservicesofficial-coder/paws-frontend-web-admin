@@ -552,7 +552,7 @@ class BookingsController extends Controller
                 $start_url = '';
                 $join_url = '';
 
-                if ($service_data->type == 'video-consultancy') {
+                if ($service_data->type == 'video-consultancy' || str_contains(strtolower($service_data->name), 'video') || $service_data->slug == 'video-consultation') {
 
                     $zoom_url = getzoomVideoUrl($data);
 

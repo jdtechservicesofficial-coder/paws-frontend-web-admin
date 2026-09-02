@@ -3,7 +3,7 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<section class="service-section ptb-120">
+<section class="service-section ptb-120" style="background: #0047b3;">
     <div class="container">
         <div class="row justify-content-center mb-30-none">
             <div class="col-xl-8 col-lg-8 mb-30">
@@ -12,7 +12,7 @@
                         @php
                         $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val') ?? '';
                         $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Service\Models\SystemService')->where('model_id', $service->id)->first();
-                        $imageUrl = $media ? $pawllyDomain . '/storage/' . $media->id . '/' . $media->file_name : getImage('');
+                        $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage('');
                         @endphp
                         <div class="service-item single">
                             <div class="service-thumb">

@@ -94,7 +94,7 @@ class AuthorizationController extends Controller
         $user = auth()->user();
 
         if ($user->ver_code == $request->code) {
-            $user->ev = 1;
+            $user->email_verified_at = now();
             $user->ver_code = null;
             $user->ver_code_send_at = null;
             $user->save();

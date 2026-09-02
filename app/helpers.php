@@ -1277,8 +1277,7 @@ function getzoomVideoUrl($data){
       CURLOPT_CUSTOMREQUEST => 'POST',
       CURLOPT_HTTPHEADER => array(
         'Host: zoom.us',
-        'Authorization: Basic ' . $authorization,
-        'Cookie: TS018dd1ba=01a4bf7a43d12da00e647623dc86cc762d126ecbc8d05da8041a487f2d9af5f795dbc94ddaff0e57c96c75394da34ba688b274d027; TS01f92dc5=01a4bf7a43d12da00e647623dc86cc762d126ecbc8d05da8041a487f2d9af5f795dbc94ddaff0e57c96c75394da34ba688b274d027; __cf_bm=2zLDWSFRt_rnknkjf0bFIFxuJIu1ZSd48NLBQiH7ByU-1691735997-0-AfSs0V8YmXQE0t25v+BewBtQQlqkCxAOHQI9pbUANYn5bxIi09JPmaKA/LM7IUsjd3iHRFhgr8BttQMgSkzlOdk=; _zm_chtaid=528; _zm_ctaid=T-ladtb9RQy5jtqpoyz5Ew.1691735997275.ec80d36ec41d720bf03b5c8cdc81edaa; _zm_mtk_guid=0bab4993560a483fb93c8926f1220417; _zm_page_auth=us05_c_9QH5C_6TQJS-eycodFJaSg; _zm_ssid=us05_c_jooeGe7USU6A4k5JXX5Psg; cred=7CB892515BDA6C68C6344C62AB3336E3'
+        'Authorization: Basic ' . $authorization
       ),
     ));
 
@@ -1383,6 +1382,14 @@ function getDiscountedProductPrice($product_price, $product_id)
 
     $discount_type = $product['discount_type'];
     $discount_value = $product['discount_value'];
+
+    $today = \Carbon\Carbon::today();
+    if ($product['discount_start_date'] && $product['discount_end_date']) {
+        if ($today->lt(\Carbon\Carbon::createFromTimestamp($product['discount_start_date'])) ||
+            $today->gt(\Carbon\Carbon::createFromTimestamp($product['discount_end_date']))) {
+            $discount_value = 0;
+        }
+    }
 
     $discount_amount = 0;
 
@@ -1531,7 +1538,8 @@ if (! function_exists('variationDiscountedPrice')) {
 
         if ($data) {
             foreach ($data as $cart) {
-                $price = optional($cart->product_variation)->price *$cart->qty;
+                $unitPrice = $cart->product_variation ? $cart->product_variation->price : optional($cart->product)->min_price;
+                $price = ($unitPrice ?? 0) * $cart->qty;
 
                 $discount_applicable = false;
 

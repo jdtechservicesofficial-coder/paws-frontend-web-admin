@@ -21,12 +21,13 @@ class ProductsController extends Controller
         $employee_id = $request->input('employee_id');        
         $productQuery = Product::query()->checkMultivendor();
 
-        // $productQuery=Product::where('status',1)->with('media','categories','brand','unit','product_variations','product_review');
-
-        $productQuery->whereHas('user', function ($query) {
-            $query->whereHas('roles', function ($query) {
-                $query->whereIn('name', ['pet_store', 'admin', 'demo_admin']);
-            });
+        $productQuery->where(function ($query) {
+            $query->whereNull('created_by')
+                ->orWhereHas('user', function ($q) {
+                    $q->whereHas('roles', function ($r) {
+                        $r->whereIn('name', ['pet_store', 'admin', 'demo_admin']);
+                    });
+                });
         });
 
         $user = User::find($employee_id);
@@ -43,15 +44,24 @@ class ProductsController extends Controller
         if($request->has('category_id') && $request->category_id != '') {
             $category_id = $request->category_id;
 
-            $productQuery->whereHas('categories', function ($query) use ($category_id) {
-                $query->where('category_id', $category_id);
+            // Include products in this category and all its child subcategories
+            $subCategoryIds = ProductCategory::where('parent_id', $category_id)->pluck('id')->toArray();
+            $allCategoryIds = array_merge([$category_id], $subCategoryIds);
+
+            $productQuery->whereHas('categories', function ($query) use ($allCategoryIds) {
+                $query->whereIn('product_categories.id', $allCategoryIds);
             });
-         }
+        }
 
 
          if ($request->has('search') && $request->search != '') {
-
-            $productQuery=$productQuery->where('name', 'like', "%{$request->search}%");
+            $search = $request->search;
+            $productQuery=$productQuery->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('categories', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%{$search}%");
+                  });
+            });
         }
 
 
