@@ -27,9 +27,9 @@ class PetType extends BaseModel
     
     protected function getPettypeImageAttribute()
     {
-        $media = $this->getFirstMediaUrl('pettype_image');
+        $media = $this->getFirstMedia('pettype_image');
 
-        return isset($media) && ! empty($media) ? $media : default_feature_image();
+        return $media ? getCloudinaryOrLocalUrl($media) : default_feature_image();
     }
 
     public function pets()

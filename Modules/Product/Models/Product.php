@@ -135,9 +135,9 @@ class Product extends BaseModel
 
     protected function getFeatureImageAttribute()
     {
-        $media = $this->getFirstMediaUrl('feature_image');
+        $media = $this->getFirstMedia('feature_image');
 
-        return isset($media) && ! empty($media) ? $media : default_feature_image();
+        return $media ? getCloudinaryOrLocalUrl($media) : default_feature_image();
     }
 
     public function user()

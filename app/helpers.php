@@ -1821,5 +1821,41 @@ function dbConnectionStatus(): bool
     return true;
     } catch (Exception $e) {
         return false;
+}
+}
+
+if (!function_exists('getCloudinaryOrLocalUrl')) {
+    function getCloudinaryOrLocalUrl($media) {
+        if (!$media) return '';
+        
+        if (isset($media->disk) && $media->disk === 'cloudinary') {
+            $cloudinaryUrl = env('CLOUDINARY_URL');
+            if ($cloudinaryUrl && preg_match('/^cloudinary:\/\/(.*?):(.*?)@(.*?)$/', $cloudinaryUrl, $matches)) {
+                $cloudName = trim($matches[3]);
+                return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
+            }
+
+            $envPaths = [
+                base_path('.env'),
+                base_path('../.env'),
+                base_path('../../.env')
+            ];
+            
+            foreach ($envPaths as $envPath) {
+                if (file_exists($envPath)) {
+                    $envContent = file_get_contents($envPath);
+                    if (preg_match('/^CLOUDINARY_URL=cloudinary:\/\/(.*?):(.*?)@(.*?)$/m', $envContent, $matches)) {
+                        $cloudName = trim($matches[3]);
+                        return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
+                    }
+                }
+            }
+        }
+        
+        $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val');
+        if (!$pawllyDomain) {
+            $pawllyDomain = url('/');
+        }
+        return rtrim($pawllyDomain, '/') . '/storage/' . $media->id . '/' . $media->file_name;
     }
 }
