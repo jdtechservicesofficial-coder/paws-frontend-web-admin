@@ -583,7 +583,7 @@ function getCloudinaryOrLocalUrl($media) {
             }
             
             // Fallback to the known Cloudinary cloud name for this project
-            return 'https://res.cloudinary.com/dnh2s1nmd/image/upload/' . $media->id . '/' . $media->file_name;
+            return 'https://res.cloudinary.com/lsotiulm/image/upload/' . $media->id . '/' . $media->file_name;
         }
     $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val') ?? '';
     return $pawllyDomain . '/storage/' . $media->id . '/' . $media->file_name;
