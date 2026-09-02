@@ -582,6 +582,7 @@ function getCloudinaryOrLocalUrl($media) {
                 }
             }
         }
+    }
     $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val') ?? '';
     return $pawllyDomain . '/storage/' . $media->id . '/' . $media->file_name;
 }
