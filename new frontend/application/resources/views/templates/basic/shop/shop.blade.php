@@ -80,8 +80,8 @@
                                         $media = \Illuminate\Support\Facades\DB::table('media')->where('model_type', 'Modules\Product\Models\Product')->where('model_id', $product->id)->first();
                                         $imageUrl = $media ? getCloudinaryOrLocalUrl($media) : getImage('');
                                     @endphp
-                                    <a href="{{ route('product.details', ['slug' => slug($product->name), 'id' => $product->id])}}">
-                                        <img src="{{ $imageUrl }}" alt="product-image">
+                                    <a href="{{ route('product.details', ['slug' => slug($product->name), 'id' => $product->id])}}" style="display: block; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 8px; background: #f8f9fa;">
+                                        <img src="{{ $imageUrl }}" alt="product-image" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                                     </a>
                                     @if(!empty($product->discount) && $product->discount > 0)
                                     <div class="product-badge bg--danger">
