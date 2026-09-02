@@ -21,7 +21,35 @@ class ProductDetailResource extends JsonResource
         $user = User::find($this->created_by);
         $gallry = $this->gallery()->get()->map(function($item) {
             $media = $item->getFirstMedia('gallery_images');
-            return $media ? getCloudinaryOrLocalUrl($media) : $item->full_url;
+            $url = $media ? getCloudinaryOrLocalUrl($media) : $item->full_url;
+            
+            if (str_contains($url, '/storage/')) {
+                $cloudName = '';
+                $cloudinaryUrl = config('cloudinary.cloud_url') ?? env('CLOUDINARY_URL');
+                if (!$cloudinaryUrl) {
+                    $envPaths = [base_path('.env'), base_path('../.env'), base_path('../../.env')];
+                    foreach ($envPaths as $envPath) {
+                        if (file_exists($envPath)) {
+                            $envContent = file_get_contents($envPath);
+                            if (preg_match('/^CLOUDINARY_URL=["\']?cloudinary:\/\/(.*?):(.*?)@([^"\'\s\r\n]+)["\']?/m', $envContent, $matches)) {
+                                $cloudName = trim($matches[3]);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    if (preg_match('/@([^\/]+)$/', $cloudinaryUrl, $matches)) {
+                        $cloudName = trim($matches[1]);
+                    }
+                }
+                if ($cloudName) {
+                    $parts = explode('/storage/', $url);
+                    if (count($parts) > 1) {
+                        return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $parts[1];
+                    }
+                }
+            }
+            return $url;
         })->toArray();
 
         array_unshift($gallry, $this->feature_image);

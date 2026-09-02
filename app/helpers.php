@@ -1828,13 +1828,11 @@ if (!function_exists('getCloudinaryOrLocalUrl')) {
     function getCloudinaryOrLocalUrl($media) {
         if (!$media) return '';
         
-        if (isset($media->disk) && $media->disk === 'cloudinary') {
-            $cloudinaryUrl = env('CLOUDINARY_URL');
-            if ($cloudinaryUrl && preg_match('/^cloudinary:\/\/(.*?):(.*?)@(.*?)$/', $cloudinaryUrl, $matches)) {
-                $cloudName = trim($matches[3]);
-                return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
-            }
-
+        $cloudName = '';
+        $cloudinaryUrl = env('CLOUDINARY_URL');
+        if ($cloudinaryUrl && preg_match('/^cloudinary:\/\/(.*?):(.*?)@(.*?)$/', $cloudinaryUrl, $matches)) {
+            $cloudName = trim($matches[3]);
+        } else {
             $envPaths = [
                 base_path('.env'),
                 base_path('../.env'),
@@ -1846,10 +1844,14 @@ if (!function_exists('getCloudinaryOrLocalUrl')) {
                     $envContent = file_get_contents($envPath);
                     if (preg_match('/^CLOUDINARY_URL=["\']?cloudinary:\/\/(.*?):(.*?)@([^"\'\s\r\n]+)["\']?/m', $envContent, $matches)) {
                         $cloudName = trim($matches[3]);
-                        return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
+                        break;
                     }
                 }
             }
+        }
+
+        if ($cloudName) {
+            return 'https://res.cloudinary.com/' . $cloudName . '/image/upload/' . $media->id . '/' . $media->file_name;
         }
         
         $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val');
