@@ -19,7 +19,10 @@ class ProductDetailResource extends JsonResource
     public function toArray($request)
     {
         $user = User::find($this->created_by);
-        $gallry = $this->gallery()->get()->pluck('full_url')->toArray();
+        $gallry = $this->gallery()->get()->map(function($item) {
+            $media = $item->getFirstMedia('gallery_images');
+            return $media ? getCloudinaryOrLocalUrl($media) : $item->full_url;
+        })->toArray();
 
         array_unshift($gallry, $this->feature_image);
 
