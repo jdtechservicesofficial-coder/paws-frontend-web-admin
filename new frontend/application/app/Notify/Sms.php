@@ -60,8 +60,11 @@ class Sms extends NotifyProcess{
 	protected function prevConfiguration(){
 		//Check If User
 		if ($this->user) {
-			$this->mobile = $this->user->mobile;
-			$this->receiverName = $this->user->fullname;
+			$this->mobile = $this->user->mobile ?? $this->user->phone ?? '';
+			$this->receiverName = $this->user->fullname ?? (($this->user->firstname ?? $this->user->first_name ?? '') . ' ' . ($this->user->lastname ?? $this->user->last_name ?? ''));
+            if (empty(trim($this->receiverName))) {
+				$this->receiverName = 'Valued Customer';
+			}
 		}
 		$this->toAddress = $this->mobile;
 	}
