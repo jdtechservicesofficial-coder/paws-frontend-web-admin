@@ -151,7 +151,7 @@ class CommonNotification extends Notification implements ShouldQueue
                         "default_sound" => false,
                         "default_vibrate_timings" => true,
                         "default_light_settings" => true,
-                        "channel_id" => "notification"
+                        "channel_id" => "notification_v2"
                     ],
                 ],
                 "apns" => [
