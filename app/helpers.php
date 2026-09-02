@@ -1850,9 +1850,6 @@ if (!function_exists('getCloudinaryOrLocalUrl')) {
                     }
                 }
             }
-            
-            // Fallback to the known Cloudinary cloud name for this project
-            return 'https://res.cloudinary.com/lsotiulm/image/upload/' . $media->id . '/' . $media->file_name;
         }
         
         $pawllyDomain = \Illuminate\Support\Facades\DB::table('settings')->where('name', 'app_domain_url')->value('val');
