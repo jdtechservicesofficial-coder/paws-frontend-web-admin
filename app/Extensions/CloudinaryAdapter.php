@@ -131,9 +131,25 @@ class CloudinaryAdapter implements FilesystemAdapter
     
     public function getUrl(string $path)
     {
-        $cloudinaryUrl = env('CLOUDINARY_URL');
-        $parsed = parse_url($cloudinaryUrl);
-        $cloudName = $parsed['host'] ?? '';
+        $cloudinaryUrl = config('cloudinary.cloud_url') ?? env('CLOUDINARY_URL');
+        $cloudName = '';
+
+        if (!$cloudinaryUrl) {
+            $envPaths = [base_path('.env'), base_path('../.env'), base_path('../../.env')];
+            foreach ($envPaths as $envPath) {
+                if (file_exists($envPath)) {
+                    $envContent = file_get_contents($envPath);
+                    if (preg_match('/^CLOUDINARY_URL=["\']?cloudinary:\/\/(.*?):(.*?)@([^"\'\s\r\n]+)["\']?/m', $envContent, $matches)) {
+                        $cloudName = trim($matches[3]);
+                        break;
+                    }
+                }
+            }
+        } else {
+            $parsed = parse_url($cloudinaryUrl);
+            $cloudName = $parsed['host'] ?? '';
+        }
+
         return "https://res.cloudinary.com/" . $cloudName . "/image/upload/" . ltrim($path, '/');
     }
 }
