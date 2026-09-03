@@ -73,6 +73,16 @@ class Order extends Model
 
     public function orderVendorMappings()
     {
-        return $this->hasMany(OrderVendorMapping::class, 'order_id', 'id');
+        return $this->hasMany(OrderVendorMapping::class, 'order_id');
+    }
+
+    public function tip_earning()
+    {
+        return $this->morphMany(\Modules\Tip\Models\TipEarning::class, 'tippable');
+    }
+
+    public function commission_earning()
+    {
+        return $this->morphMany(\Modules\Commission\Models\CommissionEarning::class, 'commissionable');
     }
 }
