@@ -122,6 +122,7 @@ trait AuthTrait
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'name' => $request->first_name . ' ' . $request->last_name,
+            'username' => \Illuminate\Support\Str::slug($request->first_name . $request->last_name) . rand(100, 999),
             'email' => $request->email,
             'mobile' => $request->mobile,
             'address' => $request->address,
