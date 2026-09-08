@@ -184,6 +184,16 @@ class AuthController extends Controller
             $password = !empty($input['accessToken']) ? $input['accessToken'] : $input['email'];
 
             $input['user_type'] = $request->user_type;
+            
+            // Fallback if social provider doesn't send names
+            $input['first_name'] = !empty($input['first_name']) ? $input['first_name'] : 'User';
+            $input['last_name'] = !empty($input['last_name']) ? $input['last_name'] : rand(100, 999);
+            
+            // Generate username if not provided
+            if (empty($input['username'])) {
+                $input['username'] = \Illuminate\Support\Str::slug($input['first_name'] . $input['last_name']) . rand(100, 999);
+            }
+            
             $input['display_name'] = $input['first_name'] . ' ' . $input['last_name'];
             $input['password'] = Hash::make($password);
             $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'user';

@@ -1,6 +1,6 @@
 <div class="row gy-4">
     @forelse ($products as $product)
-    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6">
+    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
         <div class="ecommerce-product">
             <div class="ecommerce-product__thumb">
                 <a href="{{ route('product.details', ['slug' => slug($product->name), 'id' => $product->id])}}">

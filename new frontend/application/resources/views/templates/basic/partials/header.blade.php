@@ -10,6 +10,20 @@ $wishlistCount = \Illuminate\Support\Facades\Schema::hasTable('wishlists') ? App
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Start Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<style>
+@media (max-width: 991px) {
+    .header-bottom-area .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .header-menu-content {
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 8px 15px !important;
+    }
+}
+</style>
 <header class="header-section">
     <div class="header">
         <div class="header-top-area" style="background: #0b132b; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px 0;">

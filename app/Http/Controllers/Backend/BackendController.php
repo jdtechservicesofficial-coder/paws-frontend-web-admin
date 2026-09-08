@@ -687,6 +687,7 @@ class BackendController extends Controller
                 SUM(CASE WHEN status = "confirmed" THEN 1 ELSE 0 END) as confirmed_bookings,
                 SUM(CASE WHEN status = "cancelled" THEN 1 ELSE 0 END) as cancelled_bookings,
                 SUM(CASE WHEN status = "rejected" THEN 1 ELSE 0 END) as rejected_bookings,
+                SUM(CASE WHEN status = "inprogress" THEN 1 ELSE 0 END) as inprogress_bookings,
                 SUM(CASE WHEN status = "completed" THEN 1 ELSE 0 END) as completed_bookings'))
             ->whereYear('start_date_time', $currentYear);
     

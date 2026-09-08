@@ -62,7 +62,7 @@ class BookingsController extends Controller
         }
 
         $data['start_date_time'] = $start_date_time;
-        $data['status'] = 'pending';
+        $data['status'] = ($request->price <= 0) ? 'pending' : 'draft';
         $data['user_id'] = ! empty($request->user_id) ? $request->user_id : auth()->user()->id;
         $data['branch_id'] = $request->branch_id ?? get_pet_center_id();
         $data['service_amount'] = $request->price;
@@ -180,34 +180,35 @@ class BookingsController extends Controller
         }
         // $this->updateBookingService($req, $booking->id);
 
-        $message = Str::singular($this->module_title).' Updated';
-        if($booking->wasRecentlyCreated){
-        $message = 'New '.Str::singular($this->module_title).' Added';
-
-        try {
-            $notification_data = [
-                'id' => $booking->id,
-                'user_id' => $booking->user_id,
-                'user_name' => optional($booking->user)->first_name ?? default_user_name(),
-                'employee_id' => optional($booking->employee)->id,
-                'employee_name' => optional($booking->employee)->first_name,
-                'booking_date' => $booking->start_date_time->format('d/m/Y'),
-                'booking_time' => $booking->start_date_time->format('h:i'),
-                'booking_services_names' => $booking->systemservice->name,
-                'booking_services_image' => $booking->systemservice->feature_image,
-                'booking_date_and_time' => $booking->start_date_time->format('Y-m-d H:i'),
-                'latitude' => $request->has('latitude') ? $request->latitude : null,
-                'longitude' => $request->has('longitude') ? $request->longitude : null,
-            ];
-            $type = 'new_booking';
-            $messageTemplate = 'New booking #[[booking_id]] has been booked.';
-            $notify_message = str_replace('[[booking_id]]', $booking->id, $messageTemplate);
-            $this->sendNotificationOnBookingUpdate($type,$notify_message,$notification_data);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        if ($data['status'] == 'pending') {
+            try {
+                $notification_data = [
+                    'id' => $booking->id,
+                    'user_id' => $booking->user_id,
+                    'user_name' => optional($booking->user)->first_name ?? default_user_name(),
+                    'employee_id' => optional($booking->employee)->id,
+                    'employee_name' => optional($booking->employee)->first_name,
+                    'booking_date' => \Carbon\Carbon::parse($booking->start_date_time)->format('d/m/Y'),
+                    'booking_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('h:i'),
+                    'booking_services_names' => optional($booking->systemservice)->name ?? 'Service',
+                    'booking_services_image' => optional($booking->systemservice)->feature_image ?? '',
+                    'booking_date_and_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('Y-m-d H:i'),
+                    'latitude' => $request->has('latitude') ? $request->latitude : null,
+                    'longitude' => $request->has('longitude') ? $request->longitude : null,
+                ];
+                $type = 'new_booking';
+                $messageTemplate = 'New booking #[[booking_id]] has been booked.';
+                $notify_message = str_replace('[[booking_id]]', $booking->id, $messageTemplate);
+                
+                $this->sendNotificationOnBookingUpdate($type, $notify_message, $notification_data);
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
+            }
         }
 
-
+        $message = Str::singular($this->module_title).' Updated';
+        if($booking->wasRecentlyCreated){
+            $message = 'New '.Str::singular($this->module_title).' Added';
         }
         return response()->json(['message' => $message, 'status' => true, 'booking_id' => $booking->id], 200);
     }
@@ -286,11 +287,13 @@ class BookingsController extends Controller
 
 
         if ($request->has('status') && isset($request->status)) {
-
              $status = explode(',', $request->status);
              $booking->whereIn('status', $status);
-
+        } else {
+             // Hide draft bookings from default view
+             $booking->where('status', '!=', 'draft');
         }
+        
         $per_page = $request->input('per_page', 10);
         if ($request->has('per_page') && ! empty($request->per_page)) {
             if (is_numeric($request->per_page)) {
@@ -581,11 +584,11 @@ class BookingsController extends Controller
             'user_name' => $booking->user->first_name ,
             'employee_id' => $booking->employee->id,
             'employee_name' => optional($booking->employee)->first_name,
-            'booking_date' => DateTime::createFromFormat('d/m/Y', $booking->start_date_time),
-            'booking_time' => DateTime::createFromFormat('h:i A', $booking->start_date_time),
+            'booking_date' => \Carbon\Carbon::parse($booking->start_date_time)->format('d/m/Y'),
+            'booking_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('h:i A'),
             'booking_services_names' => $booking->systemservice->name,
             'booking_services_image' => $booking->systemservice->feature_image,
-            'booking_date_and_time' => DateTime::createFromFormat('Y-m-d H:i', $booking->start_date_time),
+            'booking_date_and_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('Y-m-d H:i'),
             'latitude' => null,
             'longitude' => null
         ];
@@ -637,11 +640,11 @@ class BookingsController extends Controller
           'user_name' => $booking->user->first_name ,
           'employee_id' => $booking->employee->id,
           'employee_name' => optional($booking->employee)->first_name,
-          'booking_date' => DateTime::createFromFormat('d/m/Y', $booking->start_date_time),
-          'booking_time' => DateTime::createFromFormat('h:i A', $booking->start_date_time),
+          'booking_date' => \Carbon\Carbon::parse($booking->start_date_time)->format('d/m/Y'),
+          'booking_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('h:i A'),
           'booking_services_names' => $booking->systemservice->name,
           'booking_services_image' => $booking->systemservice->feature_image,
-          'booking_date_and_time' => DateTime::createFromFormat('Y-m-d H:i', $booking->start_date_time),
+          'booking_date_and_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('Y-m-d H:i'),
           'latitude' =>  null,
           'longitude' => null,
 

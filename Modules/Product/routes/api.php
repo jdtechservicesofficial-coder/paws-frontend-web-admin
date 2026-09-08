@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('remove-review',[ReviewController::class,'removeReview']);
     Route::post('update-review',[ReviewController::class,'UpdateReview']);
 
+    Route::post('validate-checkout',[OrdersController::class,'validateCheckout']);
     Route::post('place-order',[OrdersController::class,'store']);
 
     Route::get('get-order-list', [OrdersController::class, 'orderList']);

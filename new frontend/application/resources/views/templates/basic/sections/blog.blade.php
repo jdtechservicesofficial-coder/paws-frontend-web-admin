@@ -13,8 +13,8 @@ $pawllyBlogs = \Illuminate\Support\Facades\DB::table('blogs')->where('status', 1
             <div class="col-xl-7 col-lg-8 text-center mb-5">
                 <div class="section-header mb-0">
                     <span class="section-sub-title" style="color: #fdcd01; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; font-size: 13px; display: inline-block; background: #eff6ff; padding: 4px 14px; border-radius: 20px; margin-bottom: 12px;">{{__($content->data_values->tag ?? 'Pet Care Blog')}}</span>
-                    <h2 class="section-title" style="font-weight: 800; color: #ffffff; font-size: 36px; line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.5px;">{{__($content->data_values->heading ?? 'Latest News & Expert Pet Advice')}}</h2>
-                    <p style="color: #ffffff; font-size: 15px; line-height: 1.7; max-width: 620px; margin: 0 auto;">{{__($content->data_values->subheading ?? 'Stay updated with valuable tips on pet health, grooming routines, nutrition, and training guides from our pet experts.')}}</p>
+                    <h2 class="section-title" style="font-weight: 800; color: #ffffff; font-size: clamp(24px, 5vw, 36px); line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.5px;">{{__($content->data_values->heading ?? 'Latest News & Expert Pet Advice')}}</h2>
+                    <p style="color: #ffffff; font-size: clamp(13.5px, 3.5vw, 15px); line-height: 1.7; max-width: 620px; margin: 0 auto;">{{__($content->data_values->subheading ?? 'Stay updated with valuable tips on pet health, grooming routines, nutrition, and training guides from our pet experts.')}}</p>
                     <img src="{{asset($activeTemplateTrue.'images/shape-blue.png')}}" alt="shape" class="section-header-shpae my-3" style="max-width: 80px;">
                 </div>
             </div>
@@ -39,7 +39,7 @@ $pawllyBlogs = \Illuminate\Support\Facades\DB::table('blogs')->where('status', 1
                         </div>
                         <div class="blog-content" style="padding: 24px 20px;">
                             <span class="category" style="color: #2563eb; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; display: inline-block; margin-bottom: 8px;">@lang('Pet Care News')</span>
-                            <h4 class="title" style="font-size: 18px; font-weight: 800; line-height: 1.4; margin-bottom: 12px;">
+                            <h4 class="title" style="font-size: clamp(13.5px, 3.5vw, 18px); font-weight: 800; line-height: 1.4; margin-bottom: 12px;">
                                 <a href="{{ route('blog.details', ['slug' => slug($item->name), 'id' => $item->id])}}" style="color: #0f172a; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#0f172a'">{{__($item->name)}}</a>
                             </h4>
                         </div>
@@ -54,7 +54,7 @@ $pawllyBlogs = \Illuminate\Support\Facades\DB::table('blogs')->where('status', 1
             @endforeach
         </div>
         <div class="browse-more-btn text-center mt-5">
-            <a href="{{ route('blogs') }}" class="btn btn--base" style="padding: 12px 36px; font-weight: 700; font-size: 15px; border-radius: 10px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">@lang('Browse All Articles') <i class="las la-arrow-right ms-1"></i></a>
+            <a href="{{ route('blogs') }}" class="btn btn--base" style="padding: 12px 36px; font-weight: 700; font-size: clamp(13.5px, 3.5vw, 15px); border-radius: 10px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);">@lang('Browse All Articles') <i class="las la-arrow-right ms-1"></i></a>
         </div>
     </div>
 </section>

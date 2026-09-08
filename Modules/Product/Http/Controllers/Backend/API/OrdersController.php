@@ -53,6 +53,47 @@ class OrdersController extends Controller
         return view('product::create');
     }
 
+    public function validateCheckout(Request $request)
+    {
+        $userId = Auth::id();
+        $location_id = $request['location_id'];
+
+        $carts = Cart::where('user_id', $userId)->where('location_id', $location_id)->get();
+        if (count($carts) > 0) {
+            foreach ($carts as $cart) {
+                $product = $cart->product;
+                
+                // If product is entirely deleted
+                if (!$product) {
+                    $cart->delete();
+                    return response()->json(['message' => 'One or more items in your cart are no longer available and have been automatically removed.', 'status' => false]);
+                }
+                
+                // If it's a variation product but the variation is missing (and not explicitly -1 from frontend)
+                if ($product->has_variation == 1 && $cart->product_variation_id != -1 && !$cart->product_variation) {
+                    $cart->delete();
+                    return response()->json(['message' => 'One or more items in your cart are no longer available and have been automatically removed.', 'status' => false]);
+                }
+
+                // Check stock
+                if ($product->has_variation == 1 && $cart->product_variation_id != -1) {
+                    $stockQty = $cart->product_variation->product_variation_stock ? $cart->product_variation->product_variation_stock->stock_qty : 0;
+                } else {
+                    $stockQty = $product->stock_qty ?? 0;
+                }
+
+                if ($cart->qty > $stockQty) {
+                    $message = $product->name . ' is out of stock';
+                    return response()->json(['message' => $message, 'status' => false]);
+                }
+            }
+        } else {
+             return response()->json(['message' => 'Your cart is empty', 'status' => false]);
+        }
+        
+        return response()->json(['message' => 'Cart is valid', 'status' => true]);
+    }
+
     /**
      * Store a newly created resource in storage.
      * @param Request $request
@@ -68,12 +109,29 @@ class OrdersController extends Controller
         if (count($carts) > 0) {
             # check carts available stock -- todo::[update version] -> run this check while storing OrderItems
             foreach ($carts as $cart) {
-                if (!$cart->product_variation || !$cart->product_variation->product) {
-                    return response()->json(['message' => 'One or more items in your cart are no longer available.', 'status' => false]);
+                $product = $cart->product;
+                
+                // If product is entirely deleted
+                if (!$product) {
+                    $cart->delete();
+                    return response()->json(['message' => 'One or more items in your cart are no longer available and have been automatically removed.', 'status' => false]);
                 }
-                $productVariationStock = $cart->product_variation->product_variation_stock ? $cart->product_variation->product_variation_stock->stock_qty : 0;
-                if ($cart->qty > $productVariationStock) {
-                    $message = $cart->product_variation->product->name. ' is out of stock';
+                
+                // If it's a variation product but the variation is missing
+                if ($product->has_variation == 1 && $cart->product_variation_id != -1 && !$cart->product_variation) {
+                    $cart->delete();
+                    return response()->json(['message' => 'One or more items in your cart are no longer available and have been automatically removed.', 'status' => false]);
+                }
+
+                // Check stock
+                if ($product->has_variation == 1 && $cart->product_variation_id != -1) {
+                    $stockQty = $cart->product_variation->product_variation_stock ? $cart->product_variation->product_variation_stock->stock_qty : 0;
+                } else {
+                    $stockQty = $product->stock_qty ?? 0;
+                }
+
+                if ($cart->qty > $stockQty) {
+                    $message = $product->name . ' is out of stock';
                     return response()->json(['message' => $message, 'status' => false]);
                 }
             }
@@ -124,7 +182,13 @@ class OrdersController extends Controller
             $grandTotal = 0;
             $order_itemids = [];
             foreach ($carts as $cart) {
-                $discounted_price=variationDiscountedPrice($cart->product_variation->product,$cart->product_variation );
+                $product = $cart->product;
+                
+                if ($product->has_variation == 1 && $cart->product_variation_id != -1 && $cart->product_variation) {
+                    $discounted_price = variationDiscountedPrice($product, $cart->product_variation);
+                } else {
+                    $discounted_price = getDiscountedProductPrice($product->min_price ?? 0, $product->id);
+                }
                 $tax_data=getTaxamount($discounted_price * $cart->qty);
 
                 $orderItem                       = new OrderItem;
@@ -135,16 +199,17 @@ class OrdersController extends Controller
                 $orderItem->unit_price           = $discounted_price;
                 $orderItem->total_tax            = $tax_data['total_tax_amount'];
                 $orderItem->total_price          = $orderItem->unit_price * $orderItem->qty;
-                $orderItem->vendor_id            = $cart->product_variation->product->created_by ?? 1;
+                $orderItem->vendor_id            = $product->created_by ?? 1;
                 $orderItem->total_shipping_cost  = $logisticZone ? $logisticZone->standard_delivery_charge : 0;
                 $orderItem->payment_status       = $request['payment_status'];
-                $orderItem->discount_value       = $cart->product_variation->product->discount_value ?? 0;
-                $orderItem->discount_type        = $cart->product_variation->product->discount_type ?? 'flat';
+                $orderItem->discount_value       = $product->discount_value ?? 0;
+                $orderItem->discount_type        = $product->discount_type ?? 'flat';
                 $orderItem->expected_delivery_date  =  $expected_delivery_date->format('Y-m-d');
 
                 $orderItem->save();
-                $product = $cart->product_variation->product;
+                
                 $product->total_sale_count += $orderItem->qty;
+                $product->save();
 
                 $grandTotal += $orderItem->total_price + $orderItem->total_tax + $orderItem->total_shipping_cost + $orderGroup->total_tips_amount - $orderGroup->total_coupon_discount_amount;
                 $order_itemids[] = $orderItem->id;
@@ -176,9 +241,11 @@ class OrdersController extends Controller
 
                 // minus stock qty
                 try {
-                    $productVariationStock = $cart->product_variation->product_variation_stock;
-                    $productVariationStock->stock_qty -= $orderItem->qty;
-                    $productVariationStock->save();
+                    if ($product->has_variation == 1 && $cart->product_variation_id != -1 && $cart->product_variation) {
+                        $productVariationStock = $cart->product_variation->product_variation_stock;
+                        $productVariationStock->stock_qty -= $orderItem->qty;
+                        $productVariationStock->save();
+                    }
                 } catch (\Throwable $th) {
                     //throw $th;
                 }
@@ -206,7 +273,11 @@ class OrdersController extends Controller
             $order->save();
 
             foreach ($carts as $cart) {
-                $product_price = $cart->qty * variationDiscountedPrice($cart->product_variation->product, $cart->product_variation);
+                if ($cart->product->has_variation == 1 && $cart->product_variation_id != -1 && $cart->product_variation) {
+                    $product_price = $cart->qty * variationDiscountedPrice($cart->product, $cart->product_variation);
+                } else {
+                    $product_price = $cart->qty * getDiscountedProductPrice($cart->product->min_price ?? 0, $cart->product_id);
+                }
                 $ordervendor = new OrderVendorMapping();
                 $ordervendor->product_id = $cart->product_id;
                 $ordervendor->vendor_id = $cart->product->created_by ?? 1;

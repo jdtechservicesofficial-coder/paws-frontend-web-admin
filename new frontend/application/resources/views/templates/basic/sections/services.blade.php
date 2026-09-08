@@ -12,8 +12,8 @@ $services = \Illuminate\Support\Facades\DB::table('system_services')->where('sta
             <div class="col-xl-7 col-lg-8 text-center mb-5">
                 <div class="section-header mb-0">
                     <span class="section-sub-title" style="color: #fdcd01; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; font-size: 13px; display: inline-block; background: #eff6ff; padding: 4px 14px; border-radius: 20px; margin-bottom: 12px;">@lang('Our Services')</span>
-                    <h2 class="section-title" style="font-weight: 800; color: #ffffff; font-size: 36px; line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.5px;">{{ __($content->data_values->heading ?? 'Premier Pet Care Services') }}</h2>
-                    <p style="color: #ffffff; font-size: 15px; line-height: 1.7; max-width: 600px; margin: 0 auto;">{{ __($content->data_values->description ?? 'From premium pet supplies and expert veterinary wellness to gentle professional grooming, we cater to every need of your beloved pets.') }}</p>
+                    <h2 class="section-title" style="font-weight: 800; color: #ffffff; font-size: clamp(24px, 5vw, 36px); line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.5px;">{{ __($content->data_values->heading ?? 'Premier Pet Care Services') }}</h2>
+                    <p style="color: #ffffff; font-size: clamp(13.5px, 3.5vw, 15px); line-height: 1.7; max-width: 600px; margin: 0 auto;">{{ __($content->data_values->description ?? 'From premium pet supplies and expert veterinary wellness to gentle professional grooming, we cater to every need of your beloved pets.') }}</p>
                     <img src="{{asset($activeTemplateTrue.'images/shape-blue.png')}}" alt="shape" class="section-header-shpae my-3" style="max-width: 80px;">
                 </div>
             </div>
@@ -37,7 +37,7 @@ $colClass = count($services) == 3 ? 'col-xl-4 col-lg-4 col-md-6' : 'col-xl-6 col
                             </a>
                         </div>
                         <div class="service-content">
-                            <h3 class="title" style="margin-bottom: 10px; font-size: 20px; font-weight: 800; line-height: 1.3;">
+                            <h3 class="title" style="margin-bottom: 10px; font-size: clamp(16px, 3.5vw, 20px); font-weight: 800; line-height: 1.3;">
                                 <a href="{{route('service.details', ['slug' => $item->slug, 'id' => $item->id])}}" style="color: #0f172a; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#0f172a'">{{__($item->name)}}</a>
                             </h3>
                             <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">{{ __(strip_tags(substr($item->description, 0, 150))) }}...</p>

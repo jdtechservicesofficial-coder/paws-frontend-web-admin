@@ -12,8 +12,8 @@ $pawllyCategories = \Illuminate\Support\Facades\DB::table('pets_type')->where('s
             <div class="col-xl-7 col-lg-8 text-center mb-5">
                 <div class="section-header mb-0">
                     <span class="section-sub-title" style="color: #fdcd01; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; font-size: 13px; display: inline-block; background: #eff6ff; padding: 4px 14px; border-radius: 20px; margin-bottom: 12px;">{{__($content->data_values->tag ?? 'Pet Categories')}}</span>
-                    <h2 class="section-title" style="font-weight: 800; color: #ffffff; font-size: 36px; line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.5px;">{{__($content->data_values->heading ?? 'Care for Every Companion')}}</h2>
-                    <p style="color: #ffffff; font-size: 15px; line-height: 1.7; max-width: 600px; margin: 0 auto;">{{__($content->data_values->subheading ?? 'From playful dogs and curious cats to small companions, we provide specialized services for every breed.')}}</p>
+                    <h2 class="section-title" style="font-weight: 800; color: #ffffff; font-size: clamp(24px, 5vw, 36px); line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.5px;">{{__($content->data_values->heading ?? 'Care for Every Companion')}}</h2>
+                    <p style="color: #ffffff; font-size: clamp(13.5px, 3.5vw, 15px); line-height: 1.7; max-width: 600px; margin: 0 auto;">{{__($content->data_values->subheading ?? 'From playful dogs and curious cats to small companions, we provide specialized services for every breed.')}}</p>
                     <img src="{{asset($activeTemplateTrue.'images/shape-blue.png')}}" alt="shape" class="section-header-shpae my-3" style="max-width: 80px;">
                 </div>
             </div>
@@ -29,7 +29,7 @@ $pawllyCategories = \Illuminate\Support\Facades\DB::table('pets_type')->where('s
                     <div style="width: 140px; height: 140px; border-radius: 50%; overflow: hidden; margin: 0 auto 18px; border: 4px solid #eff6ff; box-shadow: 0 4px 15px rgba(0,0,0,0.06); background: #f1f5f9;">
                         <img src="{{$imageUrl}}" alt="{{$item->name}}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
-                    <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px; line-height: 1.3;">{{__($item->name)}}</h3>
+                    <h3 style="font-size: clamp(16px, 3.5vw, 20px); font-weight: 800; color: #0f172a; margin-bottom: 6px; line-height: 1.3;">{{__($item->name)}}</h3>
                     <span style="display: inline-block; font-size: 13px; color: #2563eb; font-weight: 600; background: #eff6ff; padding: 3px 12px; border-radius: 20px;">@lang('Available Services')</span>
                 </div>
             </div>

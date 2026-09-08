@@ -112,6 +112,29 @@
             border-color: #eab308 !important; 
             color: #0f172a !important; 
         }
+
+        /* Mobile responsiveness: Remove large side margins/padding */
+        @media (max-width: 767px) {
+            body {
+                overflow-x: hidden;
+            }
+            .container {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+            .row {
+                margin-left: -8px !important;
+                margin-right: -8px !important;
+            }
+            [class*="col-"] {
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+            section, .ptb-120, .pt-120, .pb-120 {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
     </style>
     
     <!-- JavaScript Fallback to Guarantee Header Colors Even if CSS specificity fails -->

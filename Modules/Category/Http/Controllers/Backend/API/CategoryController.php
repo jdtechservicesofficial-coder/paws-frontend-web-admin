@@ -17,7 +17,11 @@ class CategoryController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $category =  Category::where('status',1);
+        $category = Category::query();
+        
+        if (!$request->has('is_admin') || $request->is_admin != 1) {
+            $category->where('status', 1);
+        }
 
         if ($request->has('type') && $request->type != '') {
             if ($request->type == 'veterinary') {

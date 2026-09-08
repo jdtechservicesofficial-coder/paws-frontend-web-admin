@@ -14,39 +14,39 @@ $pawllyPhone = \Illuminate\Support\Facades\DB::table('settings')->where('name', 
                 <div class="contact-widget" style="background: #f8fafc; border-radius: 24px; padding: 36px 30px; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
                     <div class="contact-form-header mb-4">
                         <span style="color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; font-size: 13px; display: inline-block; background: #eff6ff; padding: 4px 14px; border-radius: 20px; margin-bottom: 10px;">@lang('Contact Details')</span>
-                        <h2 class="title" style="font-size: 28px; font-weight: 800; color: #0f172a; line-height: 1.3; margin-bottom: 8px;">{{ __($content->data_values->title) }}</h2>
+                        <h2 class="title" style="font-size: clamp(20px, 4.5vw, 28px); font-weight: 800; color: #0f172a; line-height: 1.3; margin-bottom: 8px;">{{ __($content->data_values->title) }}</h2>
                         <p style="color: #64748b; font-size: 14.5px; line-height: 1.6; margin: 0;">{{ __($content->data_values->short_details) }}</p>
                     </div>
                     <ul class="contact-item-list list-unstyled mb-0" style="display: flex; flex-direction: column; gap: 20px;">
                         <li>
                             <div class="d-flex align-items-center">
-                                <div class="contact-item-icon me-3" style="width: 52px; height: 52px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);">
+                                <div class="contact-item-icon me-3" style="width: 52px; height: 52px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: clamp(16px, 3.5vw, 22px); flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);">
                                     <i class="las la-map-marker-alt"></i>
                                 </div>
                                 <div class="contact-item-content">
-                                    <h5 class="title mb-1" style="font-size: 15px; font-weight: 800; color: #0f172a;">@lang('Our Location')</h5>
+                                    <h5 class="title mb-1" style="font-size: clamp(13.5px, 3.5vw, 15px); font-weight: 800; color: #0f172a;">@lang('Our Location')</h5>
                                     <span class="sub-title" style="font-size: 13.5px; color: #64748b; line-height: 1.5;">{!! __($content->data_values->address) !!}</span>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex align-items-center">
-                                <div class="contact-item-icon me-3" style="width: 52px; height: 52px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);">
+                                <div class="contact-item-icon me-3" style="width: 52px; height: 52px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: clamp(16px, 3.5vw, 22px); flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);">
                                     <i class="las la-phone-volume"></i>
                                 </div>
                                 <div class="contact-item-content">
-                                    <h5 class="title mb-1" style="font-size: 15px; font-weight: 800; color: #0f172a;">{{$pawllyPhone}}</h5>
+                                    <h5 class="title mb-1" style="font-size: clamp(13.5px, 3.5vw, 15px); font-weight: 800; color: #0f172a;">{{$pawllyPhone}}</h5>
                                     <span class="sub-title" style="font-size: 13.5px; color: #64748b;">{{$content->data_values->office_hour}}</span>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex align-items-center">
-                                <div class="contact-item-icon me-3" style="width: 52px; height: 52px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);">
+                                <div class="contact-item-icon me-3" style="width: 52px; height: 52px; border-radius: 14px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: clamp(16px, 3.5vw, 22px); flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);">
                                     <i class="las la-envelope"></i>
                                 </div>
                                 <div class="contact-item-content">
-                                    <h5 class="title mb-1" style="font-size: 15px; font-weight: 800; color: #0f172a;">@lang('Email Us Directly')</h5>
+                                    <h5 class="title mb-1" style="font-size: clamp(13.5px, 3.5vw, 15px); font-weight: 800; color: #0f172a;">@lang('Email Us Directly')</h5>
                                     <span class="sub-title" style="font-size: 13.5px; color: #64748b;">{{$pawllyEmail}}</span>
                                 </div>
                             </div>

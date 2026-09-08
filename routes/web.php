@@ -31,6 +31,12 @@ use Illuminate\Support\Facades\Route;
 
 // Auth Routes
 require __DIR__.'/auth.php';
+
+// Payment Callback Route
+Route::get('/payment/callback', function (\Illuminate\Http\Request $request) {
+    return view('payment.callback');
+});
+
 Route::get('/', function () {
     if (auth()->user()->hasRole('boarder')) {
         return redirect(RouteServiceProvider::BOARDER_LOGIN_REDIRECT);

@@ -82,7 +82,18 @@ class CartController extends Controller
 
         $data['user_id'] = $request->input('user_id') ?? Auth::id();
 
-        $cart = Cart::Create($data);
+        $existingCart = Cart::where('user_id', $data['user_id'])
+                            ->where('product_id', $data['product_id'])
+                            ->where('product_variation_id', $data['product_variation_id'] ?? null)
+                            ->first();
+                            
+        if ($existingCart) {
+            $existingCart->qty += ($data['qty'] ?? 1);
+            $existingCart->save();
+            $cart = $existingCart;
+        } else {
+            $cart = Cart::Create($data);
+        }
 
         $cartCollection= new CartResource($cart);
 

@@ -95,6 +95,40 @@ function sendNotification($data)
                 $data['booking_services_image'] = $booking['booking_services_image'];
                 $data['latitude'] = $booking['latitude'];
                 $data['longitude'] = $booking['longitude'];
+                
+                $bookingModel = \Modules\Booking\Models\Booking::with(['services', 'grooming', 'veterinary', 'boarding', 'training', 'daycare', 'walking'])->find($booking['id']);
+                $duration = 0;
+                $address = 'N/A';
+                if ($bookingModel) {
+                    foreach ($bookingModel->services as $service) {
+                        $duration += (int) $service->duration_min;
+                    }
+                    if ($bookingModel->grooming && $bookingModel->grooming->address) {
+                        $address = $bookingModel->grooming->address;
+                    } elseif ($bookingModel->veterinary) {
+                        $address = $bookingModel->veterinary->address ?? $bookingModel->veterinary->join_video_link ?? 'N/A';
+                    } elseif ($bookingModel->boarding && $bookingModel->boarding->dropoff_address) {
+                        $address = $bookingModel->boarding->dropoff_address;
+                    } elseif ($bookingModel->walking && $bookingModel->walking->address) {
+                        $address = $bookingModel->walking->address;
+                    } elseif ($bookingModel->daycare && $bookingModel->daycare->address) {
+                        $address = $bookingModel->daycare->address;
+                    }
+
+                    $actualServiceNames = [];
+                    if ($bookingModel->grooming && $bookingModel->grooming->service_name) {
+                        $actualServiceNames[] = $bookingModel->grooming->service_name;
+                    }
+                    if ($bookingModel->veterinary && $bookingModel->veterinary->service_name) {
+                        $actualServiceNames[] = $bookingModel->veterinary->service_name;
+                    }
+                    if (count($actualServiceNames) > 0) {
+                        $data['booking_services_names'] = $data['booking_services_names'] . ' - ' . implode(', ', $actualServiceNames);
+                    }
+                }
+                $data['booking_duration'] = $duration . ' mins';
+                $data['venue_address'] = $address;
+
                 $data['notification_group'] = 'booking';
                 $data['site_url'] = env('APP_URL');
 
@@ -124,6 +158,7 @@ function sendNotification($data)
                     if (isset($admin->email)) {
                         try {
                             $data['user_type'] = 'admin';
+                            $data['admin_name'] = $admin->first_name ?? 'Admin';
                             $admin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
                         } catch (\Exception $e) {
                             Log::error($e);
@@ -139,6 +174,7 @@ function sendNotification($data)
                         if (isset($demo_admin->email)) {
                             try {
                                 $data['user_type'] = 'demo_admin';
+                                $data['admin_name'] = $demo_admin->first_name ?? 'Demo Admin';
                                 $demo_admin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
                             } catch (\Exception $e) {
                                 Log::error($e);
@@ -1579,11 +1615,27 @@ if (! function_exists('getSubTotal')) {
         $amount = 0;
         if (count($carts) > 0) {
             foreach ($carts as $cart) {
-                $product = $cart->product_variation->product;
-                $variation = $cart->product_variation;
+                if ($cart->product_variation) {
+                    $product = $cart->product_variation->product;
+                    $variation = $cart->product_variation;
+                    $discountedPriceWithTax = variationDiscountedPrice($product, $variation, $addTax);
+                } else {
+                    $product = $cart->product;
+                    $product_price = $product->min_price ?? 0;
+                    $discountedPriceWithTax = getDiscountedProductPrice($product_price, $product->id);
+                    
+                    if ($addTax && $product->taxes) {
+                        foreach ($product->taxes as $product_tax) {
+                            if ($product_tax->tax_type == 'percent') {
+                                $discountedPriceWithTax += ($discountedPriceWithTax * $product_tax->tax_value) / 100;
+                            } elseif ($product_tax->tax_type == 'fixed') {
+                                $discountedPriceWithTax += $product_tax->tax_value;
+                            }
+                        }
+                    }
+                }
 
-                $discountedVariationPriceWithTax = variationDiscountedPrice($product, $variation, $addTax);
-                $price += (float) $discountedVariationPriceWithTax * $cart->qty;
+                $price += (float) $discountedPriceWithTax * $cart->qty;
             }
         }
 
@@ -1708,7 +1760,7 @@ function SendPushNotification($data){
                 "notification" => [
                     "sound" => "notification_sound",
                     "default_sound" => false,
-                    "channel_id" => "notification",
+                    "channel_id" => "notification_v2",
                     "click_action"=> "FLUTTER_NOTIFICATION_CLICK",
                 ],
             ],

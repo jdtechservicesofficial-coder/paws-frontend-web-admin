@@ -10,9 +10,11 @@ use Modules\Booking\Trait\PaymentTrait;
 use Modules\Tip\Models\TipEarning;
 use Modules\Commission\Models\CommissionEarning;
 
+use Modules\Booking\Trait\BookingTrait;
+
 class PaymentController extends Controller
 {
-    use PaymentTrait;
+    use PaymentTrait, BookingTrait;
 
     public function __construct()
     {
@@ -44,6 +46,34 @@ class PaymentController extends Controller
     
         }
 
+        if ($booking->status == 'draft') {
+            $booking->status = 'pending';
+            $booking->save();
+            
+            try {
+                $notification_data = [
+                    'id' => $booking->id,
+                    'user_id' => $booking->user_id,
+                    'user_name' => optional($booking->user)->first_name ?? default_user_name(),
+                    'employee_id' => optional($booking->employee)->id,
+                    'employee_name' => optional($booking->employee)->first_name,
+                    'booking_date' => \Carbon\Carbon::parse($booking->start_date_time)->format('d/m/Y'),
+                    'booking_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('h:i'),
+                    'booking_services_names' => optional($booking->systemservice)->name ?? 'Service',
+                    'booking_services_image' => optional($booking->systemservice)->feature_image ?? '',
+                    'booking_date_and_time' => \Carbon\Carbon::parse($booking->start_date_time)->format('Y-m-d H:i'),
+                    'latitude' => $request->has('latitude') ? $request->latitude : null,
+                    'longitude' => $request->has('longitude') ? $request->longitude : null,
+                ];
+                $type = 'new_booking';
+                $messageTemplate = 'New booking #[[booking_id]] has been booked.';
+                $notify_message = str_replace('[[booking_id]]', $booking->id, $messageTemplate);
+                
+                $this->sendNotificationOnBookingUpdate($type, $notify_message, $notification_data);
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
+            }
+        }
        
         $message = __('booking.payment_done');
 

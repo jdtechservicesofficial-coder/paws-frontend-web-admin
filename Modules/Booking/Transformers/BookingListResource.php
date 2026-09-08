@@ -37,6 +37,7 @@ class BookingListResource extends JsonResource
             'customer_email' => optional($this->user)->email,
             'customer_contact' => optional($this->user)->mobile,
             'customer_image' => optional($this->user)->getFirstMediaUrl('profile_image') ?: default_user_avatar(),
+            'service_name' => optional($this->grooming)->service_name ?? optional($this->veterinary)->service_name ?? optional(optional($this->training)->training)->name,
             'price' => optional($this->boarding)->price,
             'payment' => new PaymentResource($this->payment),
             'taxes' => $tax_details,

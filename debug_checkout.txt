@@ -1,0 +1,2 @@
+CartID: 3, ProductID: 1227, ProductExists: YES
+HasVariation: 1, CartVarID: -1, CartVarExists: NO

@@ -36,7 +36,10 @@ class CategoryController extends Controller
         } else if ($request->has('search')) { 
             $category->where('name', 'like', "%{$request->search}%");
         } else {
-            $category->with('media')->where('status', 1);
+            $category->with('media');
+            if (!($request->has('is_admin') && $request->is_admin == 1) && !($request->has('all') && $request->all == 1)) {
+                $category->where('status', 1);
+            }
         }
 
         if ($request->has('category_id') && $request->category_id != '') {

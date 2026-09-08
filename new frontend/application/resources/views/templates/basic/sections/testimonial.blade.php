@@ -37,7 +37,7 @@ $testimonials = getContent('testimonial.element', false, 4);
                                     <img src="{{getImage(getFilePath('frontend').'/testimonial/'.$item->data_values->profile_photo)}}" alt="client" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div>
-                                    <h3 class="title" style="font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">{{__($item->data_values->name)}}</h3>
+                                    <h3 class="title" style="font-size: clamp(13.5px, 3.5vw, 17px); font-weight: 700; color: #0f172a; margin-bottom: 2px;">{{__($item->data_values->name)}}</h3>
                                     <span class="sub-title" style="font-size: 13px; color: #2563eb; font-weight: 600;">{{__($item->data_values->designation)}}</span>
                                 </div>
                             </div>

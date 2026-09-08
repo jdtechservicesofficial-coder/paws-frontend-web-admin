@@ -235,7 +235,15 @@
 
                                 <div class="d-flex align-items-center justify-content-between pb-2">
                                     <span><b>{{ $booking->systemservice->name }}</b>
-                                        ({{ $booking->systemservice->description }})</span>
+                                        @php
+                                            $specific_service = optional($booking->grooming)->service_name ?? optional($booking->veterinary)->service_name ?? optional(optional($booking->training)->training)->name;
+                                        @endphp
+                                        @if($specific_service)
+                                            ({{ $specific_service }})
+                                        @else
+                                            ({{ $booking->systemservice->description }})
+                                        @endif
+                                    </span>
                                     <h5 class="text-primary">{{ Currency::format($booking->service_amount) }}</h5>
                                 </div>
 

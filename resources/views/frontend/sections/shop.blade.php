@@ -30,7 +30,7 @@ $products = App\Models\Product::where('status',1)->with('productImages')->latest
 
         <div class="row gy-4 justify-content-center">
             @foreach ($products as $product)
-            <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                 <div class="ecommerce-product">
                     <div class="ecommerce-product__thumb">
                         <a href="{{ route('product.details', ['slug' => slug($product->name), 'id' => $product->id])}}">

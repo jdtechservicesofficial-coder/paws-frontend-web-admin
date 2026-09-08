@@ -50,3 +50,10 @@ tail.php
 test.php
 test_*.php
 scratch_test_*
+*.aab
+*.zip
+scratch/
+scratch*.txt
+logcat*.txt
+
+firebase-service-account.json

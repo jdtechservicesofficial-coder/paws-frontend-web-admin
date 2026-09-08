@@ -1,0 +1,300 @@
+                                  const Icon(Icons.local_hospital, size: 20, color: primaryColor),
+                                  8.width,
+                                  Text("Service Details", style: boldTextStyle(size: 14)),
+                                ],
+                              ),
+                              16.height,
+                        Obx(
+                          () => AppTextField(
+                            title: locale.value.service,
+                            textStyle: primaryTextStyle(size: 12),
+                            controller: groomingController.serviceCont,
+                            textFieldType: TextFieldType.OTHER,
+                            readOnly: true,
+                            onTap: () async {
+                              serviceCommonBottomSheet(
+                                context,
+                                child: Obx(
+                                  () => BottomSelectionSheet(
+                                    title: locale.value.chooseService,
+                                    hintText: locale.value.searchForService,
+                                    hasError: groomingController.hasErrorFetchingService.value,
+                                    isEmpty: !groomingController.isLoading.value && groomingController.serviceList.isEmpty,
+                                    errorText: groomingController.errorMessageService.value,
+                                    noDataTitle: locale.value.serviceListIsEmpty,
+                                    noDataSubTitle: locale.value.thereAreNoServices,
+                                    isLoading: groomingController.isLoading,
+                                    searchApiCall: (p0) {
+                                      groomingController.getService(searchtext: p0);
+                                    },
+                                    onRetry: () {
+                                      groomingController.getService();
+                                    },
+                                    listWidget: grommingServiceListWid(groomingController.serviceList).expand(),
+                                  ),
+                                ),
+                              );
+                            },
+                            decoration: inputDecoration(context,
+                                hintText: locale.value.chooseService,
+                                fillColor: context.cardColor,
+                                filled: true,
+                                prefixIconConstraints: BoxConstraints.loose(const Size.square(60)),
+                                prefixIcon: groomingController.selectedService.value.serviceImage.isEmpty && groomingController.selectedService.value.id.isNegative
+                                    ? null
+                                    : CachedImageWidget(
+                                        url: groomingController.selectedService.value.serviceImage,
+                                        height: 35,
+                                        width: 35,
+                                        firstName: groomingController.selectedService.value.name,
+                                        fit: BoxFit.cover,
+                                        circle: true,
+                                        usePlaceholderIfUrlEmpty: true,
+                                      ).paddingOnly(left: 12, top: 8, bottom: 8, right: 12),
+                                suffixIcon: groomingController.selectedService.value.serviceImage.isNotEmpty && groomingController.selectedService.value.id.isNegative
+                                    ? Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: darkGray.withValues(alpha: 0.5))
+                                    : Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: darkGray.withValues(alpha: 0.5))),
+                          ).paddingSymmetric(horizontal: 16).visible(!groomingController.isRefresh.value),
+                        ),
+                        Obx(
+                          () => groomingController.isHomeService ? const Offstage() : Column(
+                            children: [
+                        32.height,
+                              AppTextField(
+                                title: "Branch",
+                                textStyle: primaryTextStyle(size: 12),
+                                controller: groomingController.branchCont,
+                                textFieldType: TextFieldType.OTHER,
+                                readOnly: true,
+                                onTap: () async {
+                                  serviceCommonBottomSheet(
+                                    context,
+                                    child: BottomSelectionSheet(
+                                      title: "Choose Branch",
+                                      hintText: "Search for branch",
+                                      hasError: false,
+                                      isEmpty: !groomingController.isLoading.value && groomingController.branchList.isEmpty,
+                                      errorText: "",
+                                      noDataTitle: "Branch list is empty",
+                                      noDataSubTitle: "There are no branches",
+                                      isLoading: groomingController.isLoading,
+                                      searchApiCall: (p0) {},
+                                      onRetry: () {
+                                        groomingController.getBranch();
+                                      },
+                                      listWidget: Obx(
+                                        () => ListView.builder(
+                                          itemCount: groomingController.branchList.length,
+                                          itemBuilder: (context, index) {
+                                            return RadioListTile(
+                                              value: groomingController.branchList[index].id,
+                                              groupValue: groomingController.selectedBranch.value.id,
+                                              title: Text(groomingController.branchList[index].name, style: primaryTextStyle(size: 14)),
+                                              onChanged: (val) {
+                                                groomingController.selectedBranch(groomingController.branchList[index]);
+                                                groomingController.branchCont.text = groomingController.selectedBranch.value.name;
+                                                groomingController.bookGroomingReq.branchId = groomingController.selectedBranch.value.id;
+                                                if (groomingController.selectedService.value.id > 0) {
+                                                  groomingController.getGroomer();
+                                                }
+                                                Get.back();
+                                              },
+                                            );
+                                          },
+                                        ).expand(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                decoration: inputDecoration(
+                                  context,
+                                  hintText: "Choose Branch",
+                                  fillColor: context.cardColor,
+                                  filled: true,
+                                  suffixIcon: Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: darkGray.withValues(alpha: 0.5)),
+                                ),
+                              ).paddingSymmetric(horizontal: 16),
+                              32.height,
+                              AppTextField(
+                                title: locale.value.groomer,
+                                textStyle: primaryTextStyle(size: 12),
+                                controller: groomingController.groomerCont,
+                                textFieldType: TextFieldType.OTHER,
+                                readOnly: true,
+                                onTap: () async {
+                                  if (groomingController.groomerList.length == 1 && groomingController.selectedService.value.createdBy == groomingController.groomerList.first.id) {
+                                    //
+                                  } else {
+                                    if (groomingController.selectedService.value.id.isNegative) {
+                                      toast(locale.value.pleaseSelectService);
+                                      return;
+                                    }
+                                    serviceCommonBottomSheet(
+                                      context,
+                                      child: Obx(
+                                        () => BottomSelectionSheet(
+                                          title: locale.value.chooseGroomer,
+                                          hintText: locale.value.searchForGroomer,
+                                          hasError: groomingController.hasErrorFetchingGroomer.value,
+                                          isEmpty: !groomingController.isLoading.value && groomingController.groomerList.isEmpty,
+                                          errorText: groomingController.errorMessageGroomer.value,
+                                          noDataTitle: locale.value.groomerListIsEmpty,
+                                          noDataSubTitle: locale.value.thereAreNoGroomers,
+                                          isLoading: groomingController.isLoading,
+                                          searchApiCall: (p0) {
+                                            groomingController.getGroomer(searchtext: p0);
+                                          },
+                                          onRetry: () {
+                                            groomingController.getGroomer();
+                                          },
+                                          listWidget: Obx(
+                                            () => groomerListWid(
+                                              groomingController.groomerList,
+                                            ).expand(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                decoration: inputDecoration(
+                                  context,
+                                  hintText: locale.value.chooseGroomer,
+                                  fillColor: context.cardColor,
+                                  filled: true,
+                                  prefixIconConstraints: BoxConstraints.loose(const Size.square(60)),
+                                  prefixIcon: groomingController.selectedGroomer.value.profileImage.isEmpty && groomingController.selectedGroomer.value.id.isNegative
+                                      ? null
+                                      : CachedImageWidget(
+                                          url: groomingController.selectedGroomer.value.profileImage.value,
+                                          height: 35,
+                                          width: 35,
+                                          fit: BoxFit.cover,
+                                          circle: true,
+                                        ).paddingOnly(left: 12, top: 8, bottom: 8, right: 12),
+                                  suffixIcon: !groomingController.selectedService.value.createdBy.isNegative
+                                      ? const Offstage()
+                                      : groomingController.selectedGroomer.value.profileImage.isEmpty && groomingController.selectedGroomer.value.id.isNegative
+                                          ? Icon(
+                                              Icons.keyboard_arrow_down_rounded,
+                                              size: 24,
+                                              color: darkGray.withValues(alpha: 0.5),
+                                            )
+                                          : appCloseIconButton(
+                                              context,
+                                              onPressed: () {
+                                                groomingController.clearGroomerSelection();
+                                              },
+                                              size: 11,
+                                            ),
+                                ),
+                              ).paddingSymmetric(horizontal: 16).visible(!groomingController.isRefresh.value),
+                              Text(
+                                locale.value.noteYourSelectedService,
+                                style: secondaryTextStyle(size: 10),
+                              ).paddingOnly(left: 16, right: 16, top: 6).visible(!groomingController.selectedService.value.createdBy.isNegative),
+                            ],
+                          ),
+                        ),
+                        Obx(() {
+                          if (groomingController.isPickupDropoffService && !groomingController.isHomeService) {
+                            return Column(
+                              children: [
+                                32.height,
+                                Container(
+                                  decoration: boxDecorationDefault(color: context.cardColor),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(locale.value.dropoffPickupAddress, style: primaryTextStyle()),
+                                      Switch(
+                                        activeColor: primaryColor,
+                                        value: groomingController.isPickUpDropOff.value,
+                                        onChanged: (val) {
+                                          groomingController.isPickUpDropOff(val);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ).paddingSymmetric(horizontal: 16),
+                        Obx(
+                          () => groomingController.isHomeService ? const Offstage() : Column(
+                            children: [
+                              32.height,
+                              AppTextField(
+                                title: locale.value.groomer,
+                                textStyle: primaryTextStyle(size: 12),
+                                controller: groomingController.groomerCont,
+                                textFieldType: TextFieldType.OTHER,
+                                readOnly: true,
+                                onTap: () async {
+                                  if (groomingController.groomerList.length == 1 && groomingController.selectedService.value.createdBy == groomingController.groomerList.first.id) {
+                                    //
+                                  } else {
+                                    if (groomingController.selectedService.value.id.isNegative) {
+                                      toast(locale.value.pleaseSelectService);
+                                      return;
+                                    }
+                                    serviceCommonBottomSheet(
+                                      context,
+                                      child: Obx(
+                                        () => BottomSelectionSheet(
+                                          title: locale.value.chooseGroomer,
+                                          hintText: locale.value.searchForGroomer,
+                                          hasError: groomingController.hasErrorFetchingGroomer.value,
+                                          isEmpty: !groomingController.isLoading.value && groomingController.groomerList.isEmpty,
+                                          errorText: groomingController.errorMessageGroomer.value,
+                                          noDataTitle: locale.value.groomerListIsEmpty,
+                                          noDataSubTitle: locale.value.thereAreNoGroomers,
+                                          isLoading: groomingController.isLoading,
+                                          searchApiCall: (p0) {
+                                            groomingController.getGroomer(searchtext: p0);
+                                          },
+                                          onRetry: () {
+                                            groomingController.getGroomer();
+                                          },
+                                          listWidget: Obx(
+                                            () => groomerListWid(
+                                              groomingController.groomerList,
+                                            ).expand(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                decoration: inputDecoration(
+                                  context,
+                                  hintText: locale.value.chooseGroomer,
+                                  fillColor: context.cardColor,
+                                  filled: true,
+                                  prefixIconConstraints: BoxConstraints.loose(const Size.square(60)),
+                                  prefixIcon: groomingController.selectedGroomer.value.profileImage.isEmpty && groomingController.selectedGroomer.value.id.isNegative
+                                      ? null
+                                      : CachedImageWidget(
+                                          url: groomingController.selectedGroomer.value.profileImage.value,
+                                          height: 35,
+                                          width: 35,
+                                          fit: BoxFit.cover,
+                                          circle: true,
+                                        ).paddingOnly(left: 12, top: 8, bottom: 8, right: 12),
+                                  suffixIcon: !groomingController.selectedService.value.createdBy.isNegative
+                                      ? const Offstage()
+                                      : groomingController.selectedGroomer.value.profileImage.isEmpty && groomingController.selectedGroomer.value.id.isNegative
+                                          ? Icon(
+                                              Icons.keyboard_arrow_down_rounded,
+                                              size: 24,
+                                              color: darkGray.withValues(alpha: 0.5),
+                                            )
+                                          : appCloseIconButton(
+                                              context,
+                                              onPressed: () {
+                                                groomingController.clearGroomerSelection();
+                                              },
+                                              size: 11,
+                                            ),
+                                ),
+                              ).paddingSymmetric(horizontal: 16).visible(!groomingController.isRefresh.value),
+                              Text(
+                                locale.value.noteYourSelectedService,
